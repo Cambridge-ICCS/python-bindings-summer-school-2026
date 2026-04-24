@@ -97,7 +97,7 @@ static PyMethodDef plunge_methods[] = {
 // Doc: https://docs.python.org/3/c-api/module.html#c.PyModuleDef
 static struct PyModuleDef plunge_module_def = {
   PyModuleDef_HEAD_INIT,
-  "_plunge",
+  "plunge",
   "\"Jump into the water of Python extensions!\" module",
   -1,
   plunge_methods,
@@ -109,7 +109,7 @@ static struct PyModuleDef plunge_module_def = {
 
 // Note that we are using a legacy 'single-phase' initialisation
 // https://docs.python.org/3/c-api/extension-modules.html#legacy-single-phase-initialization
-PyMODINIT_FUNC PyInit__plunge(void)
+PyMODINIT_FUNC PyInit_plunge(void)
 {
   return PyModule_Create(&plunge_module_def);
 }

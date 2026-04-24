@@ -10,12 +10,12 @@ find_package(
   COMPONENTS Development.Module
   REQUIRED)
 
-python_add_library(_plunge MODULE src/plunge/_plunge.cxx WITH_SOABI)
+python_add_library(plunge MODULE src/plunge.cxx WITH_SOABI)
 
-set_property(TARGET _plunge PROPERTY CXX_STANDARD 17)
-set_property(TARGET _plunge PROPERTY CXX_STANDARD_REQUIRED ON)
-set_property(TARGET _plunge PROPERTY CXX_EXTENSIONS OFF)
+set_property(TARGET plunge PROPERTY CXX_STANDARD 17)
+set_property(TARGET plunge PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET plunge PROPERTY CXX_EXTENSIONS OFF)
 
-target_compile_options(_plunge PRIVATE -Wall -Wextra)
+target_compile_options(plunge PRIVATE -Wall -Wextra)
 
-install(TARGETS _plunge LIBRARY DESTINATION "./${SKBUILD_PROJECT_NAME}")
+install(TARGETS plunge LIBRARY DESTINATION .)
