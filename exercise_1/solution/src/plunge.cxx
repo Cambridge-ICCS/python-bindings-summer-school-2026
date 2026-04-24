@@ -18,7 +18,7 @@ static PyObject *splash_in_cpp(PyObject */*self*/, PyObject *args)
     return NULL;
 
   // Doc: https://docs.python.org/3/c-api/sys.html#c.PySys_WriteStdout
-  PySys_WriteStdout("%s made a slpash!\U0001F30A\n", name);
+  PySys_WriteStdout("%s made a splash!\U0001F30A\n", name);
   Py_RETURN_NONE;
 }
 
@@ -59,7 +59,7 @@ static PyObject *multiple_splash(PyObject */*self*/, PyObject *args)
   }
 
   for (int i = 0; i < count; i++){
-    PySys_WriteStdout(u8"%s made a slpash!\U0001F30A\n", name);
+    PySys_WriteStdout(u8"%s made a splash!\U0001F30A\n", name);
   }
   
   Py_RETURN_NONE;
