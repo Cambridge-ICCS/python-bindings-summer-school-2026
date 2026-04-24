@@ -1,0 +1,45 @@
+name: test-exercises-ubuntu
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test-exercise-1:
+    name: Exercise 1
+    runs-on: ubuntu-slim
+
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
+
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 #v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 #v5.6.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Build and install the extension
+        working-directory: exercise_1/solution
+        run: |
+          pip install --upgrade pip
+          pip install --no-build-isolation scikit-build-core
+          pip install --no-build-isolation ".[test]"
+
+      - name: Run tests
+        working-directory: exercise_1/solution
+        run: pytest
