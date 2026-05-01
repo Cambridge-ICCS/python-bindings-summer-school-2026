@@ -1,4 +1,4 @@
-#include <simulation.h>
+#include <nbody/simulation.h>
 
 #include <iostream>
 #include <cmath>

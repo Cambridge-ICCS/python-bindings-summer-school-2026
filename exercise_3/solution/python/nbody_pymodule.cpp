@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 
-#include <simulation.h>
+#include <nbody/simulation.h>
 
 
 namespace py = pybind11;
