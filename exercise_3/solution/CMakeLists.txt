@@ -15,6 +15,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Create library from source files
 add_library(simulation_lib STATIC src/simulation.cpp)
 
+# Python extension module will be a shared library
+# to embed our simulation library we need to compile it so it is relocatable
+set_target_properties(simulation_lib PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 # Include directories
 include_directories(include)
 
