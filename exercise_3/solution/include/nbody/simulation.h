@@ -19,52 +19,34 @@ namespace constants {
 
 class Simulation {
 public:
-    // Particle data structure using Structure of Arrays (SoA)
-    struct ParticleData {
-        std::vector<double> masses;
-        std::vector<double> positions_x;
-        std::vector<double> positions_y;
-        std::vector<double> positions_z;
-        std::vector<double> velocities_x;
-        std::vector<double> velocities_y;
-        std::vector<double> velocities_z;
-
-        // Constructor with data (same signature as before)
-        ParticleData(std::vector<double> masses,
-                    std::vector<double> positions_x,
-                    std::vector<double> positions_y,
-                    std::vector<double> positions_z,
-                    std::vector<double> velocities_x,
-                    std::vector<double> velocities_y,
-                    std::vector<double> velocities_z);
-
-        // Get number of particles
-        auto size() const { return masses.size(); }
-
-        // Print particle data in CSV format to provided output stream
-        void printCSV(std::ostream& os) const;
-
-    private:
-        void validate() const;
+    struct Particle {
+        double x, y, z;      // Position components
+        double vx, vy, vz;   // Velocity components
+        double mass;         // Particle mass
     };
 
-    // Constructor
-    Simulation(double timestep, ParticleData particles);
+    Simulation(double timestep, std::vector<Particle> particles);
 
     // Method to progress the simulation by specified time
     void progress(double time);
 
-    const ParticleData& getParticleData() const;
+    const auto& getParticles() const { return particles_; }
+
+    auto numParticles() const {return particles_.size(); }
+
+    // Print particle data in CSV format to provided output stream
+    void printCSV(std::ostream& os) const;
 
     // Get elapsed time
     double getElapsedTime() const;
 
 private:
     double timestep_;
-    ParticleData particles_;
+    std::vector<Particle> particles_;
     double elapsed_time_;
 
     void leapFrogStep();
+    void validateParticles() const;
 };
 
 } // namespace nbody
