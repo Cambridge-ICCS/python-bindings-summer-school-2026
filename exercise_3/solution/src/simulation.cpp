@@ -94,6 +94,8 @@ void Simulation::leapFrogStep() {
 
             // Calculate gravitational force (F = G * m1 * m2 / r^2)
             // Acceleration on particle i due to particle j: a = F/m = G * m_j / r^2
+            // but we need acceleration vector hence need r^3 in denominator 
+            // a_vec = G *m_j r / |r|^3
             const double force_factor = constants::gravitation_constant * p2.mass / r_cubed;
 
             // Add to acceleration arrays (force direction is from i to j)
