@@ -37,8 +37,9 @@ public:
   // Print particle data in CSV format to provided output stream
   void printCSV(std::ostream &os) const;
 
-  // Get elapsed time
   double getElapsedTime() const;
+
+  double getTimestep() const { return timestep_; }
 
 private:
   double timestep_;
