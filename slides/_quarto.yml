@@ -1,0 +1,22 @@
+project:
+  type: default
+
+format:
+  revealjs:
+    theme: [default, assets/custom.scss] 
+    slide-number: true
+    transition: slide
+    logo: images/UCAM_ICCS_Logo.png
+    footer: "Python Bindings | ICCS Summer School 2026"
+    background-transition: fade
+    highlight-style: github
+    code-line-numbers: true
+    scrollable: false
+    width: 1280
+    height: 720
+
+authors:
+  - name: "Mikolaj A. Kowalski"
+    email: "mak60@cam.ac.uk"
+
+date: "2026-07-14"
