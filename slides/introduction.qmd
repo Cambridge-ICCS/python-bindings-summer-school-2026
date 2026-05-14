@@ -1,6 +1,3 @@
-## Preliminaries
-
-
 ## Scope of the course
 
 :::{.fragment}
@@ -8,8 +5,9 @@ What this course will **not** teach you:
 
 ::::{.incremental}
 - How to properly bind compiled (C++/Fortran) code to Python
-    - The topic is too broad to be covered in 1.5h session
 - If you are quick enough you can still make it to Testing (part 1)!
+- The topic is too broad to be covered in 1.5h session
+
 ::::
 :::
 
@@ -23,6 +21,31 @@ What this course **will** teach you:
 - Give some examples that can be good starting point for further study
 :::: 
 :::
+
+
+## Preliminaries
+
+System requirements:
+
+ - Linux
+ - Python (3.11+) `python3 --version`
+ - CMake (3.16+) `cmake --version`
+ - C, C++, Fortran compilers e.g. `gcc --version`
+
+If your computer does not meet these requirements, you can usa a GitHub Codespace. 
+
+## Preliminaries
+
+
+Clone the repository: 
+```bash
+git clone https://github.com/Cambridge-ICCS/python-bindings-summer-school-2026.git
+```
+
+This deck of slides is available online: \<link\> + \<QR code\>
+
+
+HERE GO INSTRUCTIONS TO RUN IN CODESPACE
 
 ## Python bindings: what do we mean?
 
