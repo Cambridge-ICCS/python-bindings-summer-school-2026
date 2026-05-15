@@ -13,14 +13,14 @@ int main() {
     std::vector<nbody::Simulation::Particle> particles = {
         // Particle 0: Sun (at origin, stationary)
         {
-            0.0, 0.0, 0.0,        // x, y, z
-            0.0, 0.0, 0.0,        // vx, vy, vz
+            {0.0, 0.0, 0.0},        // position
+            {0.0, 0.0, 0.0},        // velocity
             nbody::constants::solar_mass
         },
         // Particle 1: Earth (at 1 AU on x-axis, moving in +y direction)
         {
-            1.0, 0.0, 0.0,        // x, y, z
-            0.0, earth_velocity, 0.0,  // vx, vy, vz
+            {1.0, 0.0, 0.0},               // position
+            {0.0, earth_velocity, 0.0},    // velocity
             nbody::constants::earth_mass
         }
     };
@@ -38,8 +38,8 @@ int main() {
     auto printState = [&]() {
         const auto& particles = sim.getParticles();
         std::cout << sim.getElapsedTime()
-                  << "   " << particles[0].x << "   " << particles[0].y
-                  << "   " << particles[1].x << "   " << particles[1].y
+                  << "   " << particles[0].position.x << "   " << particles[0].position.y
+                  << "   " << particles[1].position.x << "   " << particles[1].position.y
                   << "\n";
     };
 

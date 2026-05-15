@@ -10,27 +10,40 @@ namespace py = pybind11;
 
 using py::literals::operator""_a;
 
+void bind_vector3(py::module_ &m) {
+  py::class_<nbody::Vector3>(m, "Vector3")
+      .def(py::init<double, double, double>(), "x"_a = 0.0, "y"_a = 0.0, "z"_a = 0.0)
+      .def_readwrite("x", &nbody::Vector3::x)
+      .def_readwrite("y", &nbody::Vector3::y)
+      .def_readwrite("z", &nbody::Vector3::z)
+      .def("__repr__", [](const nbody::Vector3 &v) {
+        std::stringstream msg;
+        msg << "nbody.Vector3(" << v.x << ", " << v.y << ", " << v.z << ")";
+        return msg.str();
+      });
+}
+
 void bind_particle(py::module_ &m) {
   py::class_<nbody::Simulation::Particle>(m, "Particle")
-      .def(py::init<double, double, double, double, double, double, double>(), "Docstring", "x"_a,
-           "y"_a, "z"_a, "vx"_a, "vy"_a, "vz"_a, "mass"_a)
+      .def(py::init([](nbody::Vector3 position, nbody::Vector3 velocity, double mass) {
+             return nbody::Simulation::Particle{position, velocity, mass};
+           }),
+           "position"_a, "velocity"_a, "mass"_a)
       .def_readwrite("mass", &nbody::Simulation::Particle::mass)
-      .def_readwrite("x", &nbody::Simulation::Particle::x)
-      .def_readwrite("y", &nbody::Simulation::Particle::y)
-      .def_readwrite("z", &nbody::Simulation::Particle::z)
-      .def_readwrite("vx", &nbody::Simulation::Particle::vx)
-      .def_readwrite("vy", &nbody::Simulation::Particle::vy)
-      .def_readwrite("vz", &nbody::Simulation::Particle::vz)
+      .def_property(
+          "position", [](nbody::Simulation::Particle &p) -> nbody::Vector3 & { return p.position; },
+          [](nbody::Simulation::Particle &p, const nbody::Vector3 &v) { p.position = v; })
+      .def_property(
+          "velocity", [](nbody::Simulation::Particle &p) -> nbody::Vector3 & { return p.velocity; },
+          [](nbody::Simulation::Particle &p, const nbody::Vector3 &v) { p.velocity = v; })
       .def("__repr__", [](const nbody::Simulation::Particle &p) {
         std::stringstream msg;
         msg << "nbody.Particle(";
-        msg << "mass=" << p.mass << ",";
-        msg << "x=" << p.x << ",";
-        msg << "y=" << p.y << ",";
-        msg << "z=" << p.z << ",";
-        msg << "vx=" << p.vx << ",";
-        msg << "vy=" << p.vy << ",";
-        msg << "vz=" << p.vz;
+        msg << "position=nbody.Vector3(" << p.position.x << ", " << p.position.y << ", "
+            << p.position.z << "), ";
+        msg << "velocity=nbody.Vector3(" << p.velocity.x << ", " << p.velocity.y << ", "
+            << p.velocity.z << "), ";
+        msg << "mass=" << p.mass;
         msg << ")";
         return msg.str();
       });
@@ -38,8 +51,9 @@ void bind_particle(py::module_ &m) {
 
 void bind_simulation(py::module_ &m) {
 
-  // This sets-up Numpy dtype to which `Particle` struct will be mapped
-  PYBIND11_NUMPY_DTYPE(nbody::Simulation::Particle, x, y, z, vx, vy, vz, mass);
+  // Register numpy dtypes — Vector3 must be registered before Particle
+  PYBIND11_NUMPY_DTYPE(nbody::Vector3, x, y, z);
+  PYBIND11_NUMPY_DTYPE(nbody::Simulation::Particle, position, velocity, mass);
 
   py::class_<nbody::Simulation>(m, "Simulation")
       .def(py::init<double, std::vector<nbody::Simulation::Particle>>(), "Docstring", "dt"_a,
@@ -88,6 +102,12 @@ PYBIND11_MODULE(nbody, m) {
 
   m.attr("__version__") = "0.1.0";
 
+  // Store constants
+  m.attr("EARTH_MASS") = nbody::constants::earth_mass;
+  m.attr("SOLAR_MASS") = nbody::constants::solar_mass;
+  m.attr("GRAVITATION_CONSTANT") = nbody::constants::gravitation_constant;
+
+  bind_vector3(m);
   bind_particle(m);
   bind_simulation(m);
 }

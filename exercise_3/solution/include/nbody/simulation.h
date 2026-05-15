@@ -17,12 +17,35 @@ namespace constants {
   constexpr double solar_mass = 1.0;
 } // namespace constants
 
+struct Vector3 {
+  double x, y, z;
+
+  Vector3 &operator+=(const Vector3 &o) {
+    x += o.x;
+    y += o.y;
+    z += o.z;
+    return *this;
+  }
+  Vector3 &operator-=(const Vector3 &o) {
+    x -= o.x;
+    y -= o.y;
+    z -= o.z;
+    return *this;
+  }
+  Vector3 operator+(const Vector3 &o) const { return {x + o.x, y + o.y, z + o.z}; }
+  Vector3 operator-(const Vector3 &o) const { return {x - o.x, y - o.y, z - o.z}; }
+  Vector3 operator*(double s) const { return {x * s, y * s, z * s}; }
+  Vector3 operator-() const { return {-x, -y, -z}; }
+};
+
+inline Vector3 operator*(double s, const Vector3 &v) { return v * s; }
+
 class Simulation {
 public:
   struct Particle {
-    double x, y, z;    // Position components
-    double vx, vy, vz; // Velocity components
-    double mass;       // Particle mass
+    Vector3 position; // Position [AU]
+    Vector3 velocity; // Velocity [AU/yr]
+    double mass;      // Mass [solar masses]
   };
 
   Simulation(double timestep, std::vector<Particle> particles);

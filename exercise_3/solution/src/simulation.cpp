@@ -30,8 +30,8 @@ void Simulation::printCSV(std::ostream &os) const {
   // Print each particle's data
   for (size_t i = 0; i < particles_.size(); ++i) {
     const auto &p = particles_[i];
-    os << i << "," << p.mass << "," << p.x << "," << p.y << "," << p.z << "," << p.vx << "," << p.vy
-       << "," << p.vz << "\n";
+    os << i << "," << p.mass << "," << p.position.x << "," << p.position.y << "," << p.position.z
+       << "," << p.velocity.x << "," << p.velocity.y << "," << p.velocity.z << "\n";
   }
 }
 
@@ -57,15 +57,11 @@ void Simulation::leapFrogStep() {
 
   // Update positions: r(t + dt/2) = r(t) + v(t) * dt/2
   for (auto &particle : particles_) {
-    particle.x += particle.vx * timestep_ * 0.5;
-    particle.y += particle.vy * timestep_ * 0.5;
-    particle.z += particle.vz * timestep_ * 0.5;
+    particle.position += particle.velocity * (0.5 * timestep_);
   }
 
   // Calculate gravitational accelerations
-  std::vector<double> accel_x(num_particles, 0.0);
-  std::vector<double> accel_y(num_particles, 0.0);
-  std::vector<double> accel_z(num_particles, 0.0);
+  std::vector<Vector3> accel(num_particles, {0.0, 0.0, 0.0});
 
   // Calculate forces between all particle pairs
   for (std::size_t i = 0; i < num_particles; ++i) {
@@ -77,12 +73,10 @@ void Simulation::leapFrogStep() {
       const auto &p2 = particles_[j];
 
       // Calculate distance vector between particles i and j
-      const double dx = p2.x - p1.x;
-      const double dy = p2.y - p1.y;
-      const double dz = p2.z - p1.z;
+      const Vector3 delta = p2.position - p1.position;
 
       // Calculate distance squared
-      const double r_squared = dx * dx + dy * dy + dz * dz;
+      const double r_squared = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
 
       // Add small epsilon to avoid division by zero for very close particles
       const double r_magnitude = std::sqrt(r_squared + constants::eps);
@@ -94,10 +88,8 @@ void Simulation::leapFrogStep() {
       // a_vec = G *m_j r / |r|^3
       const double force_factor = constants::gravitation_constant * p2.mass / r_cubed;
 
-      // Add to acceleration arrays (force direction is from i to j)
-      accel_x[i] += force_factor * dx;
-      accel_y[i] += force_factor * dy;
-      accel_z[i] += force_factor * dz;
+      // Add to acceleration array (force direction is from i to j)
+      accel[i] += delta * force_factor;
     }
   }
 
@@ -106,14 +98,10 @@ void Simulation::leapFrogStep() {
     auto &particle = particles_[i];
 
     // Update velocities: v(t + dt) = v(t) + a(t + dt/2) * dt
-    particle.vx += accel_x[i] * timestep_;
-    particle.vy += accel_y[i] * timestep_;
-    particle.vz += accel_z[i] * timestep_;
+    particle.velocity += accel[i] * timestep_;
 
     // Final position update: r(t + dt) = r(t + dt/2) + v(t + dt) * dt/2
-    particle.x += particle.vx * timestep_ * 0.5;
-    particle.y += particle.vy * timestep_ * 0.5;
-    particle.z += particle.vz * timestep_ * 0.5;
+    particle.position += particle.velocity * (0.5 * timestep_);
   }
 }
 
