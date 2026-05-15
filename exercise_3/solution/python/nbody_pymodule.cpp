@@ -30,12 +30,8 @@ void bind_particle(py::module_ &m) {
            }),
            "position"_a, "velocity"_a, "mass"_a)
       .def_readwrite("mass", &nbody::Simulation::Particle::mass)
-      .def_property(
-          "position", [](nbody::Simulation::Particle &p) -> nbody::Vector3 & { return p.position; },
-          [](nbody::Simulation::Particle &p, const nbody::Vector3 &v) { p.position = v; })
-      .def_property(
-          "velocity", [](nbody::Simulation::Particle &p) -> nbody::Vector3 & { return p.velocity; },
-          [](nbody::Simulation::Particle &p, const nbody::Vector3 &v) { p.velocity = v; })
+      .def_readwrite("velocity", &nbody::Simulation::Particle::velocity)
+      .def_readwrite("position", &nbody::Simulation::Particle::position)
       .def("__repr__", [](const nbody::Simulation::Particle &p) {
         std::stringstream msg;
         msg << "nbody.Particle(";
