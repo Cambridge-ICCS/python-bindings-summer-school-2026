@@ -4,7 +4,7 @@ title: "Python bindings to compiled languages"
 
 {{< include introduction.qmd >}}
 
-<!-- {{< include python_extension_modules.qmd >}} -->
+{{< include python_extension_modules.qmd >}}
 
 
 ## Try style (remove in final presentation)
