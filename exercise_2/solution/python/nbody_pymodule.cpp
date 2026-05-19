@@ -10,7 +10,21 @@ namespace py = pybind11;
 
 using py::literals::operator""_a;
 
+// This is a toy class that wraps a list of `Vector3`s
+// We use it to demonstrate how to expose C++ objects as arrays to python
+// via returning a pybind11 numpy array object
+class Vector3Pack {
+public:
+  explicit Vector3Pack(std::vector<nbody::Vector3> data) : data_(std::move(data)) {}
+  const std::vector<nbody::Vector3> &get() const { return data_; }
+
+private:
+  std::vector<nbody::Vector3> data_;
+};
+
 void bind_vector3(py::module_ &m) {
+  PYBIND11_NUMPY_DTYPE(nbody::Vector3, x, y, z);
+
   py::class_<nbody::Vector3>(m, "Vector3")
       .def(py::init<double, double, double>(), "x"_a = 0.0, "y"_a = 0.0, "z"_a = 0.0)
       .def_readwrite("x", &nbody::Vector3::x)
@@ -21,6 +35,29 @@ void bind_vector3(py::module_ &m) {
         msg << "nbody.Vector3(" << v.x << ", " << v.y << ", " << v.z << ")";
         return msg.str();
       });
+
+  py::class_<Vector3Pack>(m, "Vector3Pack")
+      .def(py::init<std::vector<nbody::Vector3>>(), "data"_a)
+      .def(
+          "asarray",
+          [](const Vector3Pack &vp) {
+            const auto &data = vp.get();
+
+            // Construct a Numpy array
+            // Pybind11 will convert
+            auto arr = py::array_t<nbody::Vector3>(
+                {data.size()},            // <- This is shape
+                {sizeof(nbody::Vector3)}, // <- These are strides in bytes
+                data.data(),              // <- Row pointer to the data
+                py::cast(vp)              // <- Reference to object that controls the lifetime
+            );
+
+            // pybind11 numpy array is writable by default
+            // To keep the view read-only we need to set a flag
+            arr.attr("flags").attr("writeable") = false;
+            return arr;
+          },
+          "Returns a view of the data");
 }
 
 void bind_particle(py::module_ &m) {
@@ -48,7 +85,6 @@ void bind_particle(py::module_ &m) {
 void bind_simulation(py::module_ &m) {
 
   // Register numpy dtypes — Vector3 must be registered before Particle
-  PYBIND11_NUMPY_DTYPE(nbody::Vector3, x, y, z);
   PYBIND11_NUMPY_DTYPE(nbody::Simulation::Particle, position, velocity, mass);
 
   py::class_<nbody::Simulation>(m, "Simulation")
