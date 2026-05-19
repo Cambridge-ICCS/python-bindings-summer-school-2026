@@ -58,6 +58,7 @@ void bind_simulation(py::module_ &m) {
       // It is equivalent to `def_property_readonly
       //.def_property("dt", &nbody::Simulation::getTimestep, nullptr)
       .def_property_readonly("dt", &nbody::Simulation::getTimestep)
+      .def_property_readonly("n_particles", &nbody::Simulation::numParticles)
       .def("progress", &nbody::Simulation::progress, "Advance the simulation by the given time",
            "time"_a)
       .def("get_elapsed_time", &nbody::Simulation::getElapsedTime,
