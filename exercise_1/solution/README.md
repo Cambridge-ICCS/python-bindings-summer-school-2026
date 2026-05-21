@@ -108,6 +108,7 @@ module creation is split into multiple phases.
 ### Acknowledgement
 
 When preparing this exercise, I have used the following great resources:
+
     - scikit-build examples: https://github.com/scikit-build/scikit-build-sample-projects
     - The Python manual: https://docs.python.org/3/extending/extending.html#writing-extensions-in-c
 
