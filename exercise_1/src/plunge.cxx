@@ -45,27 +45,6 @@ static PyObject *raise_exception(PyObject */*self*/, PyObject *arg)
 }
 
 
-static PyObject *multiple_splash(PyObject */*self*/, PyObject *args)
-{
-  // Unpack the argument tuple
-  const char *name;
-  int count;
-
-  if (!PyArg_ParseTuple(args, "si", &name, &count))
-    return NULL;
-
-  if (count < 0) {
-    PyErr_SetString(PyExc_ValueError, "Negative count");
-    return NULL;
-  }
-
-  for (int i = 0; i < count; i++){
-    PySys_WriteStdout(u8"%s made a splash!\U0001F30A\n", name);
-  }
-  
-  Py_RETURN_NONE;
-}
-
 //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 // Module Definition
 //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -85,12 +64,6 @@ static PyMethodDef plunge_methods[] = {
     // https://docs.python.org/3/c-api/structures.html#c.METH_O
     METH_O, // <- This indicates 1 argument function (passed as generic PyObject*)
     "If called with true raises an exception"
-  },
-  {
-    "multiple_splash",
-    multiple_splash,
-    METH_VARARGS,
-    "Makes a splash N times!"
   },
   {NULL, NULL, 0, NULL} /* Sentinel */
 };
