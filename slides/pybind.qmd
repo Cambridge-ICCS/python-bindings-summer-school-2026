@@ -1,0 +1,101 @@
+# C++ bindings with pybind11
+
+## What will we be binding?
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+```text
+exercise_2/
+├── CMakeLists.txt
+├── pyproject.toml
+├── include/
+│   └── nbody/
+│       └── simulation.h
+├── src/
+│   └── simulation.cpp
+├── python/
+│   ├── CMakeLists.txt
+│   └── nbody_pymodule.cpp
+└── apps/
+    ├── run_simple.cpp
+    └── live_plot.py
+```
+:::
+
+::: {.column width="55%"}
+
+- Toy N-body simulation library in C++
+- Can be build without Python bindings 
+- Python bindings are contained in `python` directory
+- Toy script simulating 'Figure-8' 3-body problem
+
+:::
+
+::::
+
+## What will we be binding?
+
+:::: {.columns}
+
+:::{.column width="40%"}
+
+{{< video images/orbit.mp4 width="500" autoplay loop >}}
+
+:::
+
+::: {.column width="60%"}
+
+In the virtual environment,<br>
+in `exercise_2` directory, run:
+```bash
+# Build the package and install dependencies
+(.venv) $ pip install . -v
+# Run the live plot script
+(.venv) $ python -i ./apps/live_plot.py
+```
+
+You should be able to see the video.
+:::
+::::
+
+
+## C++ Interface in practice {.smaller}
+
+```cpp
+std::vector<nbody::Simulation::Particle> particles = {
+    {{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, nbody::constants::solar_mass},
+    {{1.0, 0.0, 0.0}, {0.0, earth_velocity, 0.0}, nbody::constants::earth_mass},
+};
+
+nbody::Simulation sim(0.001, std::move(particles));
+
+sim.progress(0.01);
+const auto& state = sim.getParticles();
+double t = sim.getElapsedTime();
+```
+
+- `nbody::Vector3` stores `x`, `y`, `z` coordinates.
+- `nbody::Simulation::Particle` groups `position`, `velocity`, and `mass`.
+- `nbody::Simulation(dt, particles)` constructs the system `dt` is the time step
+- `sim.progress(time)` advances the system by `time` in `dt` time-steps using the leap-frog integrator.
+- `sim.getParticles()` exposes the current particle state.
+
+:::{.callout-note}
+We want to use the class in the same way. Just in Python...
+:::
+
+## Intro into pybind11
+
+
+## High-level architecture overview
+
+
+
+
+## Who owns what? Lifetimes and conversions
+
+
+
+## Exercise 2:
