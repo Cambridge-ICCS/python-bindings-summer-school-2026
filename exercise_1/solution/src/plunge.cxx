@@ -1,4 +1,5 @@
 // Python includes
+// See: https://docs.python.org/3/extending/extending.html#a-simple-example
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -96,13 +97,13 @@ static PyMethodDef plunge_methods[] = {
 
 // Doc: https://docs.python.org/3/c-api/module.html#c.PyModuleDef
 static struct PyModuleDef plunge_module_def = {
-  PyModuleDef_HEAD_INIT,
-  "plunge",
-  "\"Jump into the water of Python extensions!\" module",
-  -1,
-  plunge_methods,
-  NULL,
-  NULL,
+  PyModuleDef_HEAD_INIT,                                      // Magic macro that handles Python internals 
+  "plunge",                                                   // Module name
+  "\"Jump into the water of Python extensions!\" module",     // Module docstring 
+  -1,                                                         // Set to -1 for 'single pass initialisation'
+  plunge_methods,                                             // Provide list of methods module contains
+  NULL,                                                       // Non null only in multi-pass initialisation
+  NULL,                                                       // Function slots for deconstruction
   NULL,
   NULL
 };
