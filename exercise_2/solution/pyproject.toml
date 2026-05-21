@@ -13,3 +13,8 @@ authors = [
   { name="Mikolaj Adam Kowalski", email="mak60@cam.ac.uk" },
 ]
 license = "MIT"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "PyQt5"
+]
