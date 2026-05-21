@@ -34,12 +34,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Build and install the extension
-        working-directory: exercise_1/solution
+        working-directory: solutions/exercise_1
         run: |
           pip install --upgrade pip
           pip install --no-build-isolation scikit-build-core
           pip install --no-build-isolation ".[test]"
 
       - name: Run tests
-        working-directory: exercise_1/solution
+        working-directory: solutions/exercise_1
         run: pytest
