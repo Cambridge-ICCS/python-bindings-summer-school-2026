@@ -86,7 +86,35 @@ double t = sim.getElapsedTime();
 We want to use the class in the same way. Just in Python...
 :::
 
-## Intro into pybind11
+## Intro into pybind11 {.smaller}
+
+::::{.columns}
+
+:::{.column width="50%" .fragment}
+
+![](images/pybind11-logo.png){width=100%}
+
+Can be found on [github](https://github.com/pybind/pybind11)
+
+- Started by Wenzel Jakob at EPFL in Realistic Graphics Lab
+- Widely used: PyTorch, Jax, SciPy...
+- Sister [nanobind](https://github.com/wjakob/nanobind) library is also available
+  - Sacrifices some C++ support for performance
+  - Similar to pybind11 in API and logic
+:::
+
+
+:::{.column width="50%" .fragment}
+- Header-only library (don't need to install it, just include)
+- Well integrated into CMake build system
+  - Can use [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) to download it at build time
+- Somewhat manual
+  - You define what and how to bind yourself
+  - No automatic generation of bindings
+  - Gives better control over the interface (I argue it is better)
+:::
+
+::::
 
 
 ## High-level architecture overview
