@@ -3,7 +3,7 @@
 The goal of this exercise is to create, build and install a simple Python extension
 module written in C++. The build system and workflow is prepared for you.
 
-Your task will be to add a new function to the module :-) (But we will get to that)
+Your task will be to add a new function to the module.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ MacOS and Windows has not been tested.
 The project requires you to have a following available:
 - C and C++ compiler (e.g. g++)
 - CMake (version 3.18 or higher)
-- Python development headers (e.g. python3-dev)
+- Python development headers (e.g. 'python3-dev' package)
 - Python and pip
 
 ## Building and testing the extension
@@ -56,7 +56,7 @@ You might have noted that we did not use an 'editable' install (i.e. `pip instal
 It currently does not work. When you iterate on your project you will want to explicitly
 uninstall and install the package after each change, i.e.:
 ```bash
-pip uninstall -y plunge
+pip uninstall -y plunge # Optional. You can just re-install
 pip install . -v
 ```
 
@@ -90,7 +90,8 @@ prompts to let you explore a bit more:
 
 - Have you tried to call `raise_exception` with value that is not `bool` (e.g. `7`)?
   What happens than? Is it a 'correct' behaviour?
-
+- Try to create a module with an empty methods lists. What happens when you remove
+  the sentinel value? Why it behaves like it does?
 
 ## Notes
 
@@ -100,7 +101,7 @@ The example we are working with is not how one would write an extension module
 nowadays. We are building a module using a [legacy single-phase initialisation](https://docs.python.org/3/c-api/extension-modules.html#legacy-single-phase-initialization).
 This works better for an example since the setup is easier, but the resulting
 extension module may not work correctly in all contexts, especially when
-'sub-interpreters' are involved (e.g. `multiprocessing` module). The recommended
+'sub-interpreters' are involved (e.g. new free-threaded Python). The recommended
 way to build a module is using a [multi-phase initialisation](https://peps.python.org/pep-0489/) where
 module creation is split into multiple phases.
 
