@@ -4,7 +4,13 @@
 
 In the cloned repository navigate to `exercise_1` folder.
 
-HERE WILL BE A SOURCE TREE of what is in the folder
+```{.sourceTree}
+├── CMakeLists.txt
+├── pyproject.toml
+├── README.md
+└── src
+    └── plunge.cxx
+```
 
 ### Learning Objectives
  - How does Python load compiled code?
@@ -200,7 +206,7 @@ Small follow-up exercise to call a function from the `.so` without loading the m
 The purpose of this section was to give you a peak behind the curtain.
 
 :::{.incremental}
-- Projects generally[^1] do not write raw extension modules
+- Projects generally do not write raw extension modules
 - Interoperability with Python is common enough that many tools were developed
 - Libraries exist for popular language (C++, Fortran, Rust, Go...)
 - We can embark on a different type of swimming!
@@ -210,5 +216,3 @@ The purpose of this section was to give you a peak behind the curtain.
 Image of the ship
 :::
 
-
-[^1]: Very large projects e.g. PyTorch may have their own tooling
