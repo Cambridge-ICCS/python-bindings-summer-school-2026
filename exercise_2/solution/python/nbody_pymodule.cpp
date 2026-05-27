@@ -79,10 +79,14 @@ void bind_particle(py::module_ &m) {
       .def(py::init([](nbody::Vector3 position, nbody::Vector3 velocity, double mass) {
              return nbody::Simulation::Particle{position, velocity, mass};
            }),
-           "position"_a, "velocity"_a, "mass"_a)
+           "position"_a,
+           "velocity"_a,
+           "mass"_a)
       .def_readwrite("mass", &nbody::Simulation::Particle::mass)
       .def_readwrite("velocity", &nbody::Simulation::Particle::velocity)
       .def_readwrite("position", &nbody::Simulation::Particle::position)
+      .def_static("default",
+                  []() { return nbody::Simulation::Particle{{0., 0., 0.}, {0., 0., 0.}, 1.0}; })
       .def("__repr__", [](const nbody::Simulation::Particle &p) {
         std::stringstream msg;
         msg << "nbody.Particle(";
