@@ -16,5 +16,5 @@ license = "MIT"
 dependencies = [
     "numpy",
     "matplotlib",
-    "PyQt5"
+    "pillow",
 ]

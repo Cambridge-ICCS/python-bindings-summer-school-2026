@@ -6,7 +6,7 @@ import nbody
 # Settings
 simulation_timestep = 0.0005  # yr
 animation_timestep = 0.005  # yr per frame
-total_simulation_time = 4.0  # yr
+total_simulation_time = 1.0  # yr
 
 
 def get_particle_positions_copy(sim: nbody.Simulation) -> np.ndarray:
@@ -132,5 +132,6 @@ def update(_frame):
     time_text.set_text(f"t = {sim.get_elapsed_time():.2f} yr")
 
 
-ani = animation.FuncAnimation(fig, update, interval=30, cache_frame_data=False)
-plt.show()
+n_frames = int(total_simulation_time / animation_timestep)
+ani = animation.FuncAnimation(fig, update, frames=n_frames, interval=30, cache_frame_data=False)
+ani.save(filename="figure8_orbit.gif", writer="pillow")
