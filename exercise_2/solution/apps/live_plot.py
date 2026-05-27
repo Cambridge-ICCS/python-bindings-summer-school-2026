@@ -51,8 +51,27 @@ def get_particle_positions_view(sim: nbody.Simulation) -> np.ndarray:
     view = sim.get_particles_view()
     return view.view(np.float64).reshape(len(view), -1)
 
+def get_particle_positions_buffer(sim: nbody.Simulation) -> np.ndarray:
+    """
+    Return an array of particle positions.
 
-# get_particles_positions = get_particle_positions_copy
+    Uses the 'buffer protocol'
+
+    Parameters
+    ----------
+    sim : nbody.Simulation
+
+    Result
+    ------
+    np.ndarray
+        An array of shape (N, 3) containing the positions of the N particles.
+    """
+    view = np.asarray(sim)
+    return view.view(np.float64).reshape(len(view), -1)
+
+
+# get_particles_positions = get_particle_positions_view
+# get_particles_positions = get_particle_positions_buffer
 get_particles_positions = get_particle_positions_copy
 
 

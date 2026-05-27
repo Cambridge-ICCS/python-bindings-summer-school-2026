@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/buffer_info.h>
 #include <pybind11/numpy.h>
 
 #include <nbody/simulation.h>
@@ -36,8 +37,21 @@ void bind_vector3(py::module_ &m) {
         return msg.str();
       });
 
-  py::class_<Vector3Pack>(m, "Vector3Pack")
+  py::class_<Vector3Pack>(m, "Vector3Pack", py::buffer_protocol())
       .def(py::init<std::vector<nbody::Vector3>>(), "data"_a)
+      .def_buffer([](const Vector3Pack &vp) {
+        const auto &data = vp.get();
+        // https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html#buffer-protocol
+        return py::buffer_info(
+            const_cast<nbody::Vector3 *>(data.data()), // We need to remove 'const'
+            sizeof(nbody::Vector3),
+            py::format_descriptor<nbody::Vector3>::format(),
+            1,
+            {data.size()},
+            {sizeof(nbody::Vector3)},
+            true // Is the buffer 'read-only'
+        );
+      })
       .def(
           "asarray",
           [](const Vector3Pack &vp) {
@@ -87,40 +101,49 @@ void bind_simulation(py::module_ &m) {
   // Register numpy dtypes — Vector3 must be registered before Particle
   PYBIND11_NUMPY_DTYPE(nbody::Simulation::Particle, position, velocity, mass);
 
-  py::class_<nbody::Simulation>(m, "Simulation")
-      .def(py::init<double, std::vector<nbody::Simulation::Particle>>(), "Docstring", "dt"_a,
+  py::class_<nbody::Simulation>(m, "Simulation", py::buffer_protocol())
+      .def(py::init<double, std::vector<nbody::Simulation::Particle>>(),
+           "Docstring",
+           "dt"_a,
            "particles"_a)
       // Alternative version, provide nullptr for setter
       // It is equivalent to `def_property_readonly
       //.def_property("dt", &nbody::Simulation::getTimestep, nullptr)
       .def_property_readonly("dt", &nbody::Simulation::getTimestep)
       .def_property_readonly("n_particles", &nbody::Simulation::numParticles)
-      .def("progress", &nbody::Simulation::progress, "Advance the simulation by the given time",
+      .def("progress",
+           &nbody::Simulation::progress,
+           "Advance the simulation by the given time",
            "time"_a)
-      .def("get_elapsed_time", &nbody::Simulation::getElapsedTime,
+      .def("get_elapsed_time",
+           &nbody::Simulation::getElapsedTime,
            "Return the total elapsed simulation time")
-      .def("get_particles", &nbody::Simulation::getParticles,
+      .def("get_particles",
+           &nbody::Simulation::getParticles,
            "Return the list of particles (makes a copy)")
       .def(
           "get_particles_view",
           [](nbody::Simulation &sim) {
             const auto &particles = sim.getParticles();
-
-            // Construct a Numpy array
-            // Pybind11 will convert
-            auto arr = py::array_t<nbody::Simulation::Particle>(
-                {particles.size()},                    // <- This is shape
-                {sizeof(nbody::Simulation::Particle)}, // <- These are strides in bytes
-                particles.data(),                      // <- Row pointer to the data
-                py::cast(sim) // <- Reference to object that controls the lifetime
-            );
-
-            // pybind11 numpy array is writable by default
-            // To keep the view read-only we need to set a flag
+            auto arr =
+                py::array_t<nbody::Simulation::Particle>({particles.size()},
+                                                         {sizeof(nbody::Simulation::Particle)},
+                                                         particles.data(),
+                                                         py::cast(sim));
             arr.attr("flags").attr("writeable") = false;
             return arr;
           },
-          "Return a numpy structured array view of particles (no copy)");
+          "Return a numpy structured array view of particles (no copy)")
+      .def_buffer([](nbody::Simulation &sim) {
+        const auto &particles = sim.getParticles();
+        return py::buffer_info(const_cast<nbody::Simulation::Particle *>(particles.data()),
+                               sizeof(nbody::Simulation::Particle),
+                               py::format_descriptor<nbody::Simulation::Particle>::format(),
+                               1,
+                               {particles.size()},
+                               {sizeof(nbody::Simulation::Particle)},
+                               true);
+      });
 }
 
 PYBIND11_MODULE(nbody, m) {
