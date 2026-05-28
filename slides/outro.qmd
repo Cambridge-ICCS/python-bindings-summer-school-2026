@@ -11,3 +11,11 @@
    - Sometimes when you wish you to 'just write a loop'... you can!
    - You can plug your code into the rich, interoperable Python ecosystem
 :::
+
+
+## Thank you for your attention!
+
+Relevant but not covered topics:
+
+- Python's foreign function interface (FFI)
+- Callbacks (calling python functions from C/C++/Fortran)

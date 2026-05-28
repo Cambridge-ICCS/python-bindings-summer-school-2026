@@ -451,8 +451,8 @@ pybind11 is an example of a library with large community and industrial adoption
 - This leads to a yet diffrent kind of swimming...
 ::::
 
-::::{.fragment}
- Image of the XV/XVI century sail ship
-::::
+:::{.fragment style="position: absolute; top: 0; left: 20%; width: 100%; height: 100%;"}
+![](images/carrack.avif){width="38%" height="38%" style="object-fit: cover;"}
+:::
 
 :::

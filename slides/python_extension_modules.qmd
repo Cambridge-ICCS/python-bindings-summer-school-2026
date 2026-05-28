@@ -49,21 +49,80 @@ You will be able to import it from everywhere.
 :::
 
 
-## How does Python actually work?
+## Python and C functions in Python? {.smaller}
 
-:::{.notes}
-  - I may need more reading for this one
-  - How does Python actually execute bytecode 
-  - What happens if we call a function defined in Python
-  - What happens if we call a function defined in C/C++/Fortran
+::::{.columns}
+
+::: {.column .fragment width="50%"}
+```{python}
+#| echo: true
+def foo():
+    print("Hello, world!")
+
+print(type(print))
+print(type(len))
+print(type(foo))
+```
+:::{.incremental}
+- Functions in Python are internally represented by `struct`s
+- Some of the functions are 'built-in', they are implemented in C (wrap around C function)
+  - e.g. [print](https://github.com/python/cpython/blob/39bd44fc7091dde09abfdc27af2559c1fb52c17d/Python/bltinmodule.c#L2309-L2394), 
+    [len](https://github.com/python/cpython/blob/39bd44fc7091dde09abfdc27af2559c1fb52c17d/Python/bltinmodule.c#L1991-L2003)
 :::
 
+:::
 
-## Python extension modules
+::: {.column .fragment width="50%"}
+```c
+static PyObject *
+builtin_len(PyObject *module, PyObject *obj)
+{
+    Py_ssize_t res;
 
-- How they are 
+    res = PyObject_Size(obj);
+    if (res < 0) {
+        assert(PyErr_Occurred());
+        return NULL;
+    }
+    return PyLong_FromSsize_t(res);
+}
+```
+- Internally Python passes objects via 'opaque' `PyObject` pointers.
+- Uses well documented [C API](https://docs.python.org/3/c-api/) to manipulate them
+  - `Py` prefixed functions
+:::
+::::
 
-- https://peps.python.org/pep-3149/
+
+:::: {.fragment}
+:::{.callout}
+Python allows external code to plug-into the 'built-in' methods mechanism.
+
+This is what 'Python extension modules' do!
+:::
+::::
+
+
+## Interlude: What is shared library? {.smaller}
+
+TODO: 
+
+ - Diagram showing how we have a `python` executable with some code
+ - Inside it can request from th OS to load more code (e.g. based on some user input)
+ - i.e. it does not need to be known at compile or invocation time! 
+
+
+## Python extension modules {.smaller}
+
+TODO: 
+
+ - Introduce that Python extension modules are shared libraries
+ - Explain the convention of naming `so`s (e.g. `plunge.cpython-311-x86_64-linux-gnu.so`)
+ - Mention compatibility
+   - Generally only specific Python versions are supported
+   - There is Forwards compatibility with 'Limited API'
+
+<!-- - https://peps.python.org/pep-3149/ -->
 
 ## Anatomy of an extension module 
 
@@ -193,13 +252,15 @@ See 'Numbers' section in [parsing arguments](https://docs.python.org/3/c-api/arg
 - EXTRA IDEAS
 :::
 
-## `ctypes` interlude
+## `ctypes` interlude {.visible="hidden"}
 We talked about extension modules but a C functions in shared libraries can be 
 called using [ctypes](https://docs.python.org/3/library/ctypes.html) module of Python.
 
-```
+
 Small follow-up exercise to call a function from the `.so` without loading the module.
-```
+
+Do I have time? Should I drop this?
+
 
 ## Why you should not write extension modules by hand{.smaller}
 
@@ -212,7 +273,7 @@ The purpose of this section was to give you a peak behind the curtain.
 - We can embark on a different type of swimming!
 :::
 
-:::{.fragment}
-Image of the ship
+:::{.fragment style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"}
+![](images/ocean-liner.avif){width="80%" height="80%" style="object-fit: cover;"}
 :::
 
