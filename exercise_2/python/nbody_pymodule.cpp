@@ -6,6 +6,7 @@
 #include <nbody/simulation.h>
 
 #include <sstream>
+#include <stdexcept>
 
 namespace py = pybind11;
 
@@ -105,7 +106,7 @@ void bind_simulation(py::module_ &m) {
   // Register numpy dtypes — Vector3 must be registered before Particle
   PYBIND11_NUMPY_DTYPE(nbody::Simulation::Particle, position, velocity, mass);
 
-  py::class_<nbody::Simulation>(m, "Simulation", py::buffer_protocol())
+  py::class_<nbody::Simulation>(m, "Simulation")
       .def(py::init<double, std::vector<nbody::Simulation::Particle>>(),
            "Docstring",
            "dt"_a,
@@ -127,27 +128,8 @@ void bind_simulation(py::module_ &m) {
            "Return the list of particles (makes a copy)")
       .def(
           "get_particles_view",
-          [](nbody::Simulation &sim) {
-            const auto &particles = sim.getParticles();
-            auto arr =
-                py::array_t<nbody::Simulation::Particle>({particles.size()},
-                                                         {sizeof(nbody::Simulation::Particle)},
-                                                         particles.data(),
-                                                         py::cast(sim));
-            arr.attr("flags").attr("writeable") = false;
-            return arr;
-          },
-          "Return a numpy structured array view of particles (no copy)")
-      .def_buffer([](nbody::Simulation &sim) {
-        const auto &particles = sim.getParticles();
-        return py::buffer_info(const_cast<nbody::Simulation::Particle *>(particles.data()),
-                               sizeof(nbody::Simulation::Particle),
-                               py::format_descriptor<nbody::Simulation::Particle>::format(),
-                               1,
-                               {particles.size()},
-                               {sizeof(nbody::Simulation::Particle)},
-                               true);
-      });
+          [](nbody::Simulation & /*sim*/) { throw std::runtime_error("Not implemented"); },
+          "Return a numpy structured array view of particles (no copy)");
 }
 
 PYBIND11_MODULE(nbody, m) {
