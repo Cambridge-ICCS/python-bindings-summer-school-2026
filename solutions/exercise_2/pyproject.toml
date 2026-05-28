@@ -1,0 +1,20 @@
+[build-system]
+requires = [
+    "scikit_build_core",
+    ]
+build-backend = "scikit_build_core.build"
+
+
+[project]
+name = "nbody"
+version = "0.1.0"
+description = "Simple, toy N-body simulation with Python bindings to C++!"
+authors = [
+  { name="Mikolaj Adam Kowalski", email="mak60@cam.ac.uk" },
+]
+license = "MIT"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "pillow",
+]
