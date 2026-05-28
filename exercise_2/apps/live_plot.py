@@ -135,7 +135,7 @@ def update(_frame):
 
     sim.progress(animation_timestep)
 
-    particle_positions = get_particle_positions_view(sim)
+    particle_positions = get_particles_positions(sim)
 
     for i in range(sim.n_particles):
         trails_x[i].append(particle_positions[i, 0])
