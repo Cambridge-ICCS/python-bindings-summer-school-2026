@@ -1,0 +1,13 @@
+# What have we learned
+
+## Takeaways {.smaller}
+
+:::{.incremental}
+ - Python has a standardised and well described way to plug your compiled
+ - You are not expected to write extension modules by hand
+   - One can relay on dedicated libraries e.g. `pybind11` in C++
+   - Fortran is a bid clanky and limited, but possible and widely used (NumPy, Scipy)
+ - It is not that hard!
+   - Sometimes when you wish you to 'just write a loop'... you can!
+   - You can plug your code into the rich, interoperable Python ecosystem
+:::
