@@ -27,7 +27,7 @@ exercise_2/
 ::: {.column width="55%"}
 
 - Toy N-body simulation library in C++
-- Can be build without Python bindings 
+- Can be build without Python bindings
 - Python bindings are contained in `python` directory
 - Toy script simulating 'Figure-8' 3-body problem
 
@@ -53,10 +53,10 @@ in `exercise_2` directory, run:
 # Build the package and install dependencies
 (.venv) $ pip install . -v
 # Run the live plot script
-(.venv) $ python -i ./apps/live_plot.py
+(.venv) $ python ./apps/live_plot.py
 ```
 
-You should be able to see the video.
+A GIF file with a video should be produced in your directory.
 :::
 ::::
 
@@ -73,7 +73,7 @@ nbody::Simulation sim(0.001, std::move(particles));
 
 sim.progress(0.01);
 const auto& state = sim.getParticles();
-double t = sim.getElapsedTime();
+const double t = sim.getElapsedTime();
 ```
 
 - `nbody::Vector3` stores `x`, `y`, `z` coordinates.
@@ -119,11 +119,340 @@ Can be found on [github](https://github.com/pybind/pybind11)
 
 ## High-level architecture overview
 
+pybind11 uses C++ metaprograming to allow describing bindings in a way
+reminiscent of Python syntax.
+
+:::{.incremental}
+ - When possible makes use of python keywords: `class`, `def`
+ - Bindings are defined incrementally:
+    - First we create a module
+    - Then we add functions and classes to it
+:::
+
+## C++ Method chaining pattern {.smaller}
+pybind11 makes heavy use of C++ 'method chaining'
+```cpp
+#include <iostream>
+
+class Adder{
+    int sum;
+public:
+    Adder(int initial_value = 0 ) : sum{initial_value} {}
+    Adder& add(int a) {
+        this->sum += a;
+        return *this;
+    }
+    int result() const {return sum; }
+};
+
+int main( ) {
+    std::cout << "Sum: " << Adder(4).add(2).add(6).result() << "\n";
+    return 0;
+};
+```
+```
+Output
+  Sum: 12
+```
+Methods of a class return a reference to the class itself, so we can call another method on it and assemble them into long chains.
+
+ - Used to create more expressive interfaces
 
 
+## Building a module {.smaller}
 
-## Who owns what? Lifetimes and conversions
+```cpp
+PYBIND11_MODULE(module_name, m) {
+  m.doc() = R"pbdoc(
+      Docstring goes here!
+    )pbdoc";
+
+  // We can add attributes and functions with a natural syntax
+  m.attr("__version__") = "0.1.0";
+  m.def("square", [](int x ) { return x * x; }, "Function docstring");
+
+  // Not necessary but we can delegate to functions to bind particular classes
+  // Keeps things clean
+  bind_particular_class(m);
+}
+```
+- pybind11 gives us a macro that builds up the `PyInit_module_name` function.
+- We can add attributes and functions to the module with a natural syntax.
+  - `doc` method to access docstring
+  - `attr` method to access attributes
+  - `def` method to define functions
+
+:::{.notes}
+ - Understood how do they implement this pretty C++ wizardry.
+
+:::
+
+## Building a class {.smaller}
+
+```{.cpp code-line-numbers="1-5|6-11|12-13"}
+using py::literals::operator""_a;
+...
+void bind_particular_class(py::module_& m) {
+  py::class_<ClassName>(m, "ClassName")
+      .def(py::init<Arg1Type, Arg2Type>(), "Constructor docstring", "arg1"_a, "arg2"_a)
+      .def("method_name", &ClassName::method_name, "Method docstring")
+      .def_readwrite("py_attribute_name", &ClassName::cpp_attribute_name, "Attribute docstring")
+      .def_property("with_getter_and_setter",
+          &ClassName::getter_method,
+          &ClassName::setter_method, // Will be read-only if given `nullptr`
+          "Property docstring").
+      // In place of a function address you can provide a lambda!
+      .def_static("default", [](){ return ClassName(3,5); }, "Static method docstring");
+}
+```
+- Uses 'method chaining' to build Domain Specific Language
+  - If you squint your eyes enough, it looks like Python! ಡ_ಡ
+- We need to take an address of methods, functions and members (i.e. `&` operator)
 
 
+## Lifetimes and memory management {.smaller}
 
-## Exercise 2:
+::: {.fragment}
+Python memory is managed:
+```{python}
+#| echo: true
+import sys
+a = [1, 2, 3]
+b = a
+# 3: a, b, and the argument to getrefcount
+print(f"References: {sys.getrefcount(a)}")
+del a
+print(f"References: {sys.getrefcount(b)}")
+```
+Interpreter keeps track of references to an allocated object and frees the memory
+when it reaches zero.
+
+:::
+
+::: {.fragment}
+C++ memory is also *managed* (by you... )
+
+```cpp
+void memory_leak() {
+    int* a = new int[5];
+}
+```
+:::
+
+::: {.fragment}
+::::{.callout-caution}
+Programmers and Python can step on each other's toes!
+
+There needs to be clear division of ownership for objects managed by C++ and Python
+::::
+:::
+
+## Lifetimes and memory management {.smaller}
+
+How does pybind11 handles this?: [return value policies](https://pybind11.readthedocs.io/en/stable/advanced/functions.html#return-value-policies)
+
+- Generally pybind11 will try to use a sensible default
+  - e.g. when returning a C++ type that has been bound
+    - Makes a **copy** when returning references (i.e. `const T&` or `T&`)
+    - **Moves** when returning `T` (i.e. by value) or rvalues (i.e. `T&&`)
+    - **Takes ownership** when returning a pointer (i.e. `T*` or `std::unique_ptr<T>`)
+- Different behaviour for values returned by 'properties' (i.e. `def_property`)
+  - Ties lifetime of the returned object to the lifetime of the parent object
+
+::::{.callout-note}
+No need to worry about it most of the time, but need to have it 'in the back of your head'.
+::::
+
+:::{.notes}
+- Here I need to mention Python reference counting and the resulting copies.
+- Add a mini exercise (demo) to show how pybind11 makes a copy when returning a
+  reference (it will touch upon return values policies)
+:::
+
+## STL containers {.smaller}
+We bind in C++ with:
+```cpp
+#include <pybind11/stl.h> // <- Enables automatic conversions
+....
+m.def("my_len", [](std::vector<int>& vec) {
+    return vec.size();
+});
+```
+In Python we can use like:
+```python
+assert my_len([1, 2, 3]) == 3
+```
+:::{.incremental}
+- pybind11 contains quality-of-life feature that automatically converts between C++ STL containers and Python data structures.
+- The price we pay is **copy**
+- Works great for small data (∩_∩)
+- Not so great for MiB or GiB sized data structures (╯°□°)╯︵ ┻━┻
+:::
+
+:::{.notes}
+- Pybind is trying to be helpful. And performs automatic conversions between Python data structures
+ and C++ STL containers
+- Sadly the price we pay for this feature is a copy
+- Brilliant for small data, catastrophic for scientific workflows
+:::
+
+## Array compatibility {.smaller}
+
+Python and pybind11 offer direct support for array views and NumPy arrays ┬─┬ノ( º _ ºノ)
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+### Buffer protocol
+In-build Python standard for exposing array-like data.
+
+```{python}
+#| echo: true
+import numpy as np
+import inspect
+a = np.array([[1., 2.], [3., 4.]])
+
+# Prefer: buf = memoryview(a) !
+buf = a.__buffer__(inspect.BufferFlags.FULL)
+print(f"Format:  {buf.format}")
+print(f"Shape:   {buf.shape}")
+print(f"Strides: {buf.strides}")
+```
+
+- We can register our type to have `__buffer__` method in pybind11
+- It returns a descriptor of a buffer (aka array)
+
+:::
+
+::: {.column .fragment width="50%"}
+
+### NumPy Arrays
+
+pybind11 has a build-in `py::array` compatible with `numpy.ndarray`
+
+- We can construct them directly on the C++ side and return from functions
+- We need to be careful to ensure they contain reference to the 'owner' of the
+  original data
+:::
+::::
+
+
+## Buffer example {.smaller}
+
+Adapted from `python/nbody_pymodule.cpp` in the repository.
+```cpp
+// Register dtype for a custom type)
+PYBIND11_NUMPY_DTYPE(nbody::Vector3, x, y, z);
+
+py::class_<Vector3Pack>(m, "Vector3Pack", py::buffer_protocol())
+    .def_buffer([](const Vector3Pack &vp) {
+      const auto &data = vp.get();
+        return py::buffer_info(
+          const_cast<nbody::Vector3 *>(data.data()),  // Pointer to start of the  data
+          sizeof(nbody::Vector3),     // Size of a single element in bytes
+          // Format syntax is defined in the Python documentation:
+          // https://docs.python.org/3/library/struct.html#format-strings
+          py::format_descriptor<nbody::Vector3>::format(),
+          1,                          // Number of dimensions
+          {data.size()},              // Shape of the array
+          {sizeof(nbody::Vector3)},   // Strides in bytes
+          true                        // 'readonly' flag
+        );
+    });
+```
+
+## NumPy Array example {.smaller}
+
+```cpp
+// Register dtype for a custom type
+PYBIND11_NUMPY_DTYPE(nbody::Vector3, x, y, z);
+...
+py::class_<Vector3Pack>(m, "Vector3Pack", py::buffer_protocol())
+    .def("asarray",
+        [](const Vector3Pack &vp) {
+          const auto &data = vp.get();
+
+          // Construct a Numpy array
+          // Pybind11 will convert
+          auto arr = py::array_t<nbody::Vector3>(
+              {data.size()},            // <- This is shape
+              {sizeof(nbody::Vector3)}, // <- These are strides in bytes
+              data.data(),              // <- Row pointer to the data
+              py::cast(vp)              // <- Reference to object that controls the lifetime
+          );
+
+          // pybind11 numpy array is writable by default
+          // To keep the view read-only we need to set a flag
+          arr.attr("flags").attr("writeable") = false;
+          return arr;
+        }
+```
+
+## Exploring the Module {visibility="hidden"}
+
+- Docstrings, and typed signatures
+- mention that the stubs files can be generated with pybind11-stubgen (type checking and IDE support)
+
+## Exercise 2: Add array view to the `Simulation`
+
+Inside the `apps/live_plot.py` script there are three ways to get particle positions:
+```python
+# get_particles_positions = get_particle_positions_view
+# get_particles_positions = get_particle_positions_buffer
+get_particles_positions = get_particle_positions_copy
+```
+Currently only the *copy* via STL container is implemented.
+
+## Exercise 2: Add array view to the `Simulation` {.smaller}
+
+To compile and run the script (in virtual environment; in `exercise_2` directory):
+```bash
+pip install .- v
+python ./apps/live_plot.py
+```
+
+To get better error  messages (colours) build locally (in `exercise_2` directory):
+```bash
+cmake -B build .
+cmake --build build
+```
+This will **not** make your module available in `python`! (use `pip` after you are done debugging)
+
+:::{.callout-note}
+# Task
+Use either buffer protocol or NumPy array to get particle positions without a copy.
+
+For NumPy array you need to implement `get_particles_view` method in `Simulation` class bindings.
+:::
+
+:::{.callout-tip}
+Use `Vector3Pack` class as a reference for your implementation!
+:::
+
+## Extra topics to potentially cover {visibility="hidden"}
+ - https://pybind11.readthedocs.io/en/stable/advanced/pycpp/utilities.html#capturing-standard-output-from-ostream
+ - Callbacks!
+ - Stubs generation with pybind11-stubgen
+
+## All programming languages are equal...
+
+pybind11 is an example of a library with large community and industrial adoption.
+
+- Polished interface and well maintained
+- Covers many different use cases
+
+:::{.fragment}
+#### ... but some are more equal then others
+
+::::{.incremental}
+- C++ is not widely adopted in the climate science community
+- 'Scientific languages' often receive much less industrial support
+- This leads to a yet diffrent kind of swimming...
+::::
+
+::::{.fragment}
+ Image of the XV/XVI century sail ship
+::::
+
+:::
