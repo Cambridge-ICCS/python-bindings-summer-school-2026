@@ -1,0 +1,11 @@
+{
+    "name": "devcontainer-iccs-ppython-bindings",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+    "vscode": {
+        "extensions": ["ms-vscode.cpptools", "ms-python.python"]
+    }
+}
+}
