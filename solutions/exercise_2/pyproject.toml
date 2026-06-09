@@ -1,0 +1,24 @@
+[build-system]
+requires = [
+    "scikit_build_core",
+    ]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "plunge_pyb"
+version = "0.1.0"
+description = "Jump into the world of Python extensions (legs first) and make a splash!"
+authors = [
+  { name="Mikolaj Adam Kowalski", email="mak60@cam.ac.uk" },
+]
+license = "MIT"
+dependencies = [
+    "numpy",
+]
+
+
+[project.optional-dependencies]
+test = ["pytest", "wurlitzer"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
