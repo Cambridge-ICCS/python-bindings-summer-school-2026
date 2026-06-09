@@ -10,13 +10,14 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test-exercise-1:
-    name: Exercise 1
+  build-and-test:
+    name: All exercises
     runs-on: ubuntu-slim
 
     strategy:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
+        exercise: [1, 2]
 
     steps:
       - name: Install dependencies
@@ -34,12 +35,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Build and install the extension
-        working-directory: solutions/exercise_1
+        working-directory: solutions/exercise_${{ matrix.exercise }}
         run: |
           pip install --upgrade pip
           pip install --no-build-isolation scikit-build-core
           pip install --no-build-isolation ".[test]"
 
       - name: Run tests
-        working-directory: solutions/exercise_1
+        working-directory: solutions/exercise_${{ matrix.exercise }}
         run: pytest
