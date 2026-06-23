@@ -19,7 +19,17 @@ course in their own time.
 
 ## Learning Objectives
 
-TODO
+This course is intended as a first introduction to binding external code written
+in a compiled language (C++) to Python as a Python extension module. It does
+not attempt to cover every detail of the process, but rather give you a flavour
+of what to expect.
+
+By the end of this course you should be able to:
+
+- Explain why Python extension modules are needed and when they are the right tool
+- Understand the structure of the Python C API for writing extension modules
+- Use [pybind11](https://pybind11.readthedocs.io/en/stable/) to expose C++ functions to Python
+- Use pybind11 to work with NumPy arrays and call Python functions from C++
 
 ## Teaching Material
 
@@ -32,8 +42,8 @@ The repository contains two exercises, each in their own directory:
 
 | Exercise | Topic | Description |
 |---|---|---|
-| [exercise_1/](exercise_1/) | Python C API | Build a "hello world" extension module using the low-level Python C API. Add a `multiple_splash` function that prints a message a given number of times. |
-| [exercise_2/](exercise_2/) | pybind11 | Re-implement the same extension using [pybind11](https://pybind11.readthedocs.io/en/stable/), then add an `interpolate` function that applies a Python callable to a NumPy array. |
+| [exercise_1](exercise_1/) | Python C API | Build a "hello world" extension module using the low-level Python C API. Add a `multiple_splash` function that prints a message a given number of times. |
+| [exercise_2](exercise_2/) | pybind11 | Re-implement the same extension using [pybind11](https://pybind11.readthedocs.io/en/stable/), then add an `interpolate` function that applies a Python callable to a NumPy array. |
 
 Each exercise directory contains its own `README.md` with detailed instructions and tasks.
 
