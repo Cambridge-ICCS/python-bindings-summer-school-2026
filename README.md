@@ -24,25 +24,44 @@ TODO
 ## Teaching Material
 
 ### Slides
-The slides for this workshop can be viewed here: [\<TOTO\>](https://iccs.cam.ac.uk/)
+The slides for this workshop can be viewed here: [\<TODO\>](https://iccs.cam.ac.uk/)
 
 ### Exercises
-TODO
- 
+
+The repository contains two exercises, each in their own directory:
+
+| Exercise | Topic | Description |
+|---|---|---|
+| [exercise_1/](exercise_1/) | Python C API | Build a "hello world" extension module using the low-level Python C API. Add a `multiple_splash` function that prints a message a given number of times. |
+| [exercise_2/](exercise_2/) | pybind11 | Re-implement the same extension using [pybind11](https://pybind11.readthedocs.io/en/stable/), then add an `interpolate` function that applies a Python callable to a NumPy array. |
+
+Each exercise directory contains its own `README.md` with detailed instructions and tasks.
 
 ### Worked Solutions
-TODO
+
+Fully worked solutions for both exercises are provided in the [solutions/](solutions/) directory.
 
 
 ## Preparation and prerequisites
 
 ### Prerequisites
 
-TODO
+- Prior experience with Python is assumed. You should be comfortable writing and reading Python code
+- Basic familiarity with C++, but no expert knowledge is required. Just enough to read C++ code will be sufficient.
+- A laptop and a GitHub account. The course will use [GitHub Codespaces](https://docs.github.com/en/codespaces/about-codespaces/what-are-codespaces) as the development environment.
+
 
 ### Preparation
 
-TODO
+1. Open this repository in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview)
+   by clicking the green **Code** button on the repository page and selecting **Open with Codespaces**.
+2. Wait for the devcontainer to build and start — this installs all system dependencies automatically.
+3. Inside the terminal, create and activate a Python virtual environment before starting an exercise:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
 
 ## Installation and setup
 
