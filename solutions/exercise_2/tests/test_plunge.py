@@ -50,12 +50,12 @@ def test_print_numpy_array_prints_size_and_values(capsys):
 
 def test_apply_on_range_returns_transformed_values():
     result = plunge_pyb.apply_on_range(lambda value: value * value, 0, 4)
-    np.testing.assert_array_equal(result, np.array([0.0, 1.0, 4.0, 9.0]))
+    np.testing.assert_array_equal(result, np.array([0, 1, 4, 9], dtype=np.int32))
 
 
 def test_apply_on_range_handles_non_zero_start():
     result = plunge_pyb.apply_on_range(lambda value: value + 10, 2, 5)
-    np.testing.assert_array_equal(result, np.array([12.0, 13.0, 14.0]))
+    np.testing.assert_array_equal(result, np.array([12, 13, 14], dtype=np.int32))
 
 
 def test_apply_on_range_returns_empty_array_for_empty_range():

@@ -68,14 +68,14 @@ void print_numpy_array(py::array_t<double> numpy_array) {
 }
 
 
-py::array_t<double> apply_on_range(std::function<int(int)> func, int start, int end) {
+py::array_t<int> apply_on_range(std::function<int(int)> func, int start, int end) {
     if (end <= start) {
         // We can build an uninitialised numpy array by providing
         // just the sizes to the constructor
-        return py::array_t<double>({0});
+        return py::array_t<int>({0});
     }
     const int size = end - start;
-    py::array_t<double> out({size});
+    py::array_t<int> out({size});
     for (int i = 0; i < size; i++ ) {
         // We need to use a special getter to get 'mutable' reference to
         // an element
