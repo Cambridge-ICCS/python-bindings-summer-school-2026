@@ -38,6 +38,8 @@ void splash_cpp(const std::string &name) {
 // Pybind11 automatically translates C++ exceptions to Python ones
 void raise_exception(bool should_raise) {
     if (should_raise) {
+        // Note the translation table for exception types:
+        // https://pybind11.readthedocs.io/en/stable/advanced/exceptions.html#built-in-c-to-python-exception-translation
         throw std::runtime_error("Exception as requested ;-)");
     }
 }
