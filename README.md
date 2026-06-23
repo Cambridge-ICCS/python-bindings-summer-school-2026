@@ -63,6 +63,26 @@ Fully worked solutions for both exercises are provided in the [solutions/](solut
 
 ### Preparation
 
+In the exercises we will be writing C++ code. A short refresher on the basics 
+of the syntax may be useful. We restrict ourselves to a basic subset of the 
+language. Topics that may need to be reviewed include:
+
+- Writing C/C++ functions
+- Pass by value and pass by reference
+- `#include <...>` and `#include "..."` directives
+- Raw string literals (e.g. `R"(Hello, world!)"` see 
+  [cppreference](https://en.cppreference.com/w/cpp/language/string_literal))
+- `std::function` [class](https://en.cppreference.com/cpp/utility/functional/function) and 
+  [lambda expressions](https://en.cppreference.com/cpp/language/lambda).
+- Working with `std::vector` and `std::string` types
+- Using the `&` operator to take the address of entities (e.g. variables or functions)
+- Using `.` and `->` operators to access members of a `struct` or `class`
+- Using `{}` to initialise a `struct`
+
+
+
+## Installation and setup
+
 1. Open this repository in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview)
    by clicking the green **Code** button on the repository page and selecting **Open with Codespaces**.
 2. Wait for the devcontainer to build and start — this installs all system dependencies automatically.
@@ -71,11 +91,6 @@ Fully worked solutions for both exercises are provided in the [solutions/](solut
    python3 -m venv .venv
    source .venv/bin/activate
    ```
-
-
-## Installation and setup
-
-TODO
 
 ## License
 
