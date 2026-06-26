@@ -1,8 +1,8 @@
-# Exercise 2: Python extension with Pybind11
+# Exercise 2: Python Extension with Pybind11
 
 The goal of this exercise is to show how we can use
 [Pybind11](https://pybind11.readthedocs.io/en/stable/) to create a Python
-extension with a similar functionality to our 'hello world example' (Exercise 1).
+extension with similar functionality to the Hello World example from Exercise 1.
 
 Hopefully it will show that writing a Python extension can be simple and
 not very invasive for the C++ side of the code.
@@ -24,7 +24,7 @@ The project requires the following:
 
 ### Setting up the environment
 
-Same as in Exercise 1, we will work indirectly inside a Python's virtual
+Same as in Exercise 1, we will work inside a Python virtual
 environment. You can create one with the following command:
 
 ```bash
@@ -48,9 +48,9 @@ build process with CMake will be printed. This is useful to understand what
 is going on behind the scenes, but not necessary in general.
 
 You might have noted that we did not use an 'editable' install
-(i.e. `pip install -e .`). It currently does not work. When you iterate on your
-project you will want to explicitly re-install the package after
-each change, i.e.:
+(i.e. `pip install -e .`). Editable installs are not supported for these exercises.
+When you iterate on your project you will want to explicitly reinstall the
+package after each change:
 ```bash
 pip install . -v
 ```
@@ -63,12 +63,12 @@ pip uninstall -y plunge_pyb
 ## Tasks
 
 The Python bindings are defined together with the C++ code in the
-`src/plunge_pyb.cpp` file. You  will notice that there are a couple of functions
-already defined.
+`src/plunge_pyb.cpp` file. You will notice that there are a couple of functions
+already defined in that file:
 
 ### Task 1: Re-implement the `multiple_splash` function
 
-You may notice that two functions familiar from the exercise 1 are already
+You may notice that two functions familiar from Exercise 1 are already
 defined in the `plunge_pyb.cpp` file. These are:
 - `splash` that takes a string and prints a message to the console
 - `raise_exception` that optionally raises an exception.
@@ -78,8 +78,8 @@ re-implement the `multiple_splash` function. As a reminder, this is what it is
 supposed to do:
 
 - `multiple_splash` takes a string and an integer `n` and prints the message
-  to the console `n` times. If the count is negative it should raise
-  a `ValueError` exception
+  to the console `n` times. If the count is negative, it should raise
+  a `ValueError` exception.
 
 ### Task 2: Implement the `interpolate` function
 
