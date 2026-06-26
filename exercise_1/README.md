@@ -1,7 +1,7 @@
 # Exercise 1: Hello World Python Extension
 
 The goal of this exercise is to create, build and install a simple Python extension
-module written in C++. The build system and workflow is prepared for you.
+module written in C++. The build system and workflow are prepared for you.
 
 Your task will be to add a new function to the module.
 
@@ -9,9 +9,9 @@ Your task will be to add a new function to the module.
 
 This exercise has been prepared and developed on Ubuntu 22.04 with Python 3.11,
 but it should work on other Linux distributions and Python versions as well.
-MacOS and Windows has not been tested.
+MacOS and Windows have not been tested.
 
-The project requires you to have a following available:
+The project requires you to have the following available:
 - C and C++ compiler (e.g. g++)
 - CMake (version 3.18 or higher)
 - Python development headers (e.g. 'python3-dev' package)
@@ -21,7 +21,7 @@ The project requires you to have a following available:
 
 ### Setting up the environment
 
-To keep things clean, we will work inside a Python's virtual environment.
+To keep things clean, we will work inside a Python virtual environment.
 You can create one with the following command:
 
 ```bash
@@ -44,19 +44,18 @@ pip install scikit-build-core
 ### Building and installing the extension
 
 To build the extension module, simply navigate to the exercise directory
-(one that contains) `pyproject.toml` file and invoke pip:`
+(the one that contains the `pyproject.toml` file) and invoke pip:
 ```bash
 pip install . -v
 ```
-Note that we added an optional `--verbose -v` flag. This is so the output of the build
+Note that we added the optional `--verbose` (`-v`) flag so the output of the build
 process with CMake will be printed. This is useful to understand what is going on
 behind the scenes, but not necessary in general.
 
 You might have noted that we did not use an 'editable' install (i.e. `pip install -e .`).
-It currently does not work. When you iterate on your project you will want to explicitly
-uninstall and install the package after each change, i.e.:
+Editable installs are not supported for these exercises. When you iterate on your
+project you will want to explicitly reinstall the package after each change:
 ```bash
-pip uninstall -y plunge # Optional. You can just re-install
 pip install . -v
 ```
 
@@ -85,13 +84,13 @@ What you need to do is the following:
 Good luck!
 
 ## Extra questions
-If you have solved the main task and there is still some time left here are some
-prompts to let you explore a bit more:
+If you have solved the main task and there is still some time left, here are some
+prompts to let you explore further:
 
-- Have you tried to call `raise_exception` with value that is not `bool` (e.g. `7`)?
-  What happens than? Is it a 'correct' behaviour?
-- Try to create a module with an empty methods lists. What happens when you remove
-  the sentinel value? Why it behaves like it does?
+- Have you tried to call `raise_exception` with a value that is not `bool` (e.g. `7`)?
+  What happens then? Is this correct behaviour?
+- Try to create a module with an empty methods list. What happens when you remove
+  the sentinel value? Why does it behave that way?
 
 ## Notes
 
@@ -106,7 +105,7 @@ way to build a module is using a [multi-phase initialisation](https://peps.pytho
 module creation is split into multiple phases.
 
 
-### Acknowledgement
+### Acknowledgments
 
 When preparing this exercise, I have used the following great resources:
 
