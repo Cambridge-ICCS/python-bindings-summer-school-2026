@@ -34,7 +34,7 @@ By the end of this course you should be able to:
 ## Teaching Material
 
 ### Slides
-The slides for this workshop can be viewed here: [\<TODO\>](https://iccs.cam.ac.uk/)
+The slides for this workshop can be viewed at: https://cambridge-iccs.github.io/python-bindings-summer-school-2026/
 
 ### Exercises
 
