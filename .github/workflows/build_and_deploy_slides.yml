@@ -1,0 +1,65 @@
+name: build-and-deploy-slides
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "slides/**"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "slides/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+    build:
+        name: Build slides
+        runs-on: ubuntu-slim
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 #v7.0.0
+              with:
+                persist-credentials: false
+
+            - name: Set up Quarto
+              uses: quarto-dev/quarto-actions/setup@8a96df13519ee81fd526f2dfca5962811136661b # v2.2.0
+
+            - name: Build the slides
+              working-directory: slides
+              run: quarto render index.qmd --output-dir _site/
+
+            - name: Upload slides as artifact
+              uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+              with:
+                name: github-pages
+                path: slides/_site/
+
+    deploy:
+        name: Deploy slides
+        if: github.event_name != 'pull_request'
+        needs: build
+        runs-on: ubuntu-slim
+
+        permissions:
+            pages: write      # to deploy to Pages
+            id-token: write   # to verify the deployment originates from an appropriate source
+
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
