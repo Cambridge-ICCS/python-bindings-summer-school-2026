@@ -80,17 +80,75 @@ language. Topics that may need to be reviewed include:
 - Using `{}` to initialise a `struct`
 
 
-
 ## Installation and setup
 
 1. Open this repository in a [GitHub Codespace](https://docs.github.com/en/codespaces/overview)
-   by clicking the green **Code** button on the repository page and selecting **Open with Codespaces**.
-2. Wait for the devcontainer to build and start — this installs all system dependencies automatically.
-3. Inside the terminal, create and activate a Python virtual environment before starting an exercise:
+    1. Click the green "Code" button and select "Codespace" tab
+    2. Click on "Create codespace on main" to start a new codespace
+    3. A new browser tab will open with the codespace. Be patient, it can take a few minutes to 
+       start up.
+    4. Once the codespace is ready, you will see a VS Code interface with a terminal open at the 
+       bottom.
+    5. If you close the tab, you can return to the codespace by going to the "Codespaces" tab 
+       in the repository and clicking on the codespace name. It will take you back to where 
+       you left off.
+    6. At the end of the course go to the "Codespaces" tab in the repository and click on the "..." 
+       next to the codespace name. Select "Delete codespace" to free up resources.
+
+2. Open the terminal in the codespace, then create and activate a Python virtual 
+   environment before starting an exercise:
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate
    ```
+   The `.venv` folder is part of the workspace, so it persists across codespace restarts. 
+   If you open a new terminal, remember to re-activate with `source .venv/bin/activate`.
+
+## Building and running the exercises
+
+Every exercise in this course can be built in one of the two ways. It is most
+convenient to use both, depending on the context.
+
+### Build locally with cmake
+
+This builds the module inside a `build/` subdirectory at the root of the exercise.
+It does not install the module in your virtual environment, so it will only be importable
+if you **invoke python from the `build` folder**. This is recommended for iteration and debugging.
+
+You can build with the following commands:
+```bash
+mkdir -p build
+cd build
+cmake ..
+cmake --build .
+```
+
+After each change to the source code, re-run `cmake --build .` from within the `build/` folder.
+
+### Install with pip
+
+This builds and installs the module into your virtual environment, i.e. it
+places the compiled binary in the `site-packages` folder. The module can then be
+imported from any directory.
+
+You can build and install with the following command:
+```bash
+pip install -v .
+```
+The `-v` (verbose) flag shows the build system and compiler output.
+
+After each change to the source code, reinstall:
+```bash
+pip install -v .
+```
+
+Editable installs (`pip install -e .`) are not supported for these exercises.
+You must reinstall after every change.
+
+Once you are done with the exercise, you can uninstall it with:
+```bash
+pip uninstall <library_name>
+```
 
 ## License
 
