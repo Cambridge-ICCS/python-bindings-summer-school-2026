@@ -105,11 +105,22 @@ This is what 'Python extension modules' do!
 
 ## Interlude: What is shared library? {.smaller}
 
-TODO: 
+- We don't want to **recompile Python** with our extension each time.<br>
+- We need to introduce extra executable machine code at runtime stored in a separate
+file (⊙.☉)7
 
- - Diagram showing how we have a `python` executable with some code
- - Inside it can request from th OS to load more code (e.g. based on some user input)
- - i.e. it does not need to be known at compile or invocation time! 
+::: {.fragment}
+This is accomplished by **shared libraries**: `*.so` on Linux or `*.dll` on Windows.
+
+
+![](images/dylib_diagram.png){width=50% fig-align="center"}
+
+::: {.callout}
+Shared libraries allow programs to load extra code at runtime.
+They select them 'like' a file and can extract function to run
+:::
+
+:::
 
 
 ## Python extension modules {.smaller}
