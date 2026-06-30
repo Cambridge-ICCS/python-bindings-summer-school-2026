@@ -23,7 +23,74 @@ What this course **will** teach you:
 :::
 
 
-## Preliminaries
+## Preliminaries {.smaller}
+
+::::{.columns}
+
+:::{.column width="80%"}
+
+This deck of slides is available online: <br>
+[https://cambridge-iccs.github.io/python-bindings-summer-school-2026/](https://cambridge-iccs.github.io/python-bindings-summer-school-2026/)
+
+Github repository: <br>
+[https://github.com/Cambridge-ICCS/python-bindings-summer-school-2026](https://github.com/Cambridge-ICCS/python-bindings-summer-school-2026)
+
+
+To run the exercises we will use a GitHub Codespace. You can access it by clicking the link below: <br>
+[https://codespaces.new/Cambridge-ICCS/python-bindings-summer-school-2026](https://codespaces.new/Cambridge-ICCS/python-bindings-summer-school-2026)
+
+If you close a tab, the link above will create a new Codespace. To resume latest work, you can use the link below: <br>
+[https://codespaces.new/Cambridge-ICCS/python-bindings-summer-school-2026?quickstart=1](https://codespaces.new/Cambridge-ICCS/python-bindings-summer-school-2026?quickstart=1)
+
+
+::: {.callout-warning}
+GitHub may include a warning saying:<br>
+["Codespace usage for this repository is paid for by \<you\>"]{.mark} <br>
+Don't worry, you will not be charged. There is a free quota each month.
+:::
+
+
+:::
+
+:::{.column  width="20%"}
+**Slides link**
+![](images/qrcode.svg){width=100%}
+:::
+
+::::
+
+## Preliminaries: Codespace {.smaller}
+
+In the repository:
+[https://github.com/Cambridge-ICCS/python-bindings-summer-school-2026](https://github.com/Cambridge-ICCS/python-bindings-summer-school-2026)
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+**List or open a codespace**: <br>
+![](images/codespace1.png){width=100%}
+
+::: {.callout-note}
+# Task
+
+Open a codespace now.
+:::
+
+
+:::
+
+:::{.column width="50%"}
+
+
+**Don't forget to delete when you are done**: <br>
+![](images/codespace2.png){width=100%}
+
+:::
+
+::::
+
+## Preliminaries: Running locally
 
 System requirements:
 
@@ -31,21 +98,14 @@ System requirements:
  - Python (3.11+) `python3 --version`
  - CMake (3.16+) `cmake --version`
  - C, C++, Fortran compilers e.g. `gcc --version`
+ - Python development headers (e.g. `python3-dev` on Ubuntu)
 
-If your computer does not meet these requirements, you can usa a GitHub Codespace. 
+:::{.callout-caution}
+# Running locally is the danger zone 🛦🛦🛦
 
-## Preliminaries
+Please prefer the codespace for the course. Try on you machine during miniproject or at home.
 
-
-Clone the repository: 
-```bash
-git clone https://github.com/Cambridge-ICCS/python-bindings-summer-school-2026.git
-```
-
-This deck of slides is available online: \<link\> + \<QR code\>
-
-
-HERE GO INSTRUCTIONS TO RUN IN CODESPACE
+:::
 
 ## Python bindings: what do we mean?
 
