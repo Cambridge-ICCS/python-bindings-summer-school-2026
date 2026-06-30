@@ -263,14 +263,14 @@ See 'Numbers' section in [parsing arguments](https://docs.python.org/3/c-api/arg
 - EXTRA IDEAS
 :::
 
-## `ctypes` interlude {.visible="hidden"}
+<!-- ## `ctypes` interlude {data-visibility="hidden"}
 We talked about extension modules but a C functions in shared libraries can be 
 called using [ctypes](https://docs.python.org/3/library/ctypes.html) module of Python.
 
 
 Small follow-up exercise to call a function from the `.so` without loading the module.
 
-Do I have time? Should I drop this?
+Do I have time? Should I drop this? -->
 
 
 ## Why you should not write extension modules by hand{.smaller}
