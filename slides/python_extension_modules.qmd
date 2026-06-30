@@ -260,7 +260,7 @@ See 'Numbers' section in [parsing arguments](https://docs.python.org/3/c-api/arg
 :::{.callout-warning appearance="minimal"}
 # More things to try (time allowing)
 - What will happen if you pass a non-integer value for `count` or non-bool to `raise_exception`? Is the behaviour what you expected? 
-- EXTRA IDEAS
+
 :::
 
 <!-- ## `ctypes` interlude {data-visibility="hidden"}
