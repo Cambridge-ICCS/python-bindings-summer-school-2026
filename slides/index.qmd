@@ -8,7 +8,7 @@ title: "Python bindings to compiled languages"
 
 {{< include pybind.qmd >}}
 
-{{< include fortran.qmd >}}
+<!-- {{< include fortran.qmd >}} -->
 
 {{< include outro.qmd >}}
 
