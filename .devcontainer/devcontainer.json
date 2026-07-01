@@ -3,9 +3,14 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
+    "postCreateCommand": "python3 -m venv .venv && echo \"source \\\"$(pwd)/.venv/bin/activate\\\"\" >> ~/.bashrc",
     "customizations": {
-    "vscode": {
-        "extensions": ["ms-vscode.cpptools", "ms-python.python"]
+        "vscode": {
+            "extensions": ["ms-vscode.cpptools", "ms-python.python"],
+            "settings": {
+                "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+                "python.terminal.activateEnvironment": true
+            }
+        }
     }
-}
 }
