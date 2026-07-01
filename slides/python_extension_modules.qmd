@@ -125,15 +125,66 @@ They select them 'like' a file and can extract function to run
 
 ## Python extension modules {.smaller}
 
-TODO: 
+::::{.columns}
 
- - Introduce that Python extension modules are shared libraries
- - Explain the convention of naming `so`s (e.g. `plunge.cpython-311-x86_64-linux-gnu.so`)
- - Mention compatibility
-   - Generally only specific Python versions are supported
-   - There is Forwards compatibility with 'Limited API'
+::: {.column width="70%"}
 
-<!-- - https://peps.python.org/pep-3149/ -->
+'Python extension module' is a shared library with extra properties:
+
+- Has a name that follows a specific convention:<br>
+`<module_name>.cpython-<python_version><extra_metadata>.so`
+    - e.g. `my_mod.cpython-311-x86_64-linux-gnu.so`
+    - Conventions are defined in [PEP 3149](https://peps.python.org/pep-3149/)
+- Inside the library there is a function `PyInit_<module_name>`
+  - Python will try to load it and execute on `import <module_name>`
+  - Will search for the `*.so` in `sys.path` (like any module file)
+  - Note that the name of the function and library file must match!
+
+:::
+
+::: {.column width="30%"}
+:::{style="font-size: 0.85em;"}
+
+You can have a look inside your 'site-packages' directory extension modules!
+```bash
+cd $(python -c "import sys; print(sys.path[-1])")
+find . -name '*.so'
+```
+e.g.:
+```
+./rpds/rpds.cpython-312-x86_64-linux-gnu.so
+./_cffi_backend.cpython-312-x86_64-linux-gnu.so
+./yaml/_yaml.cpython-312-x86_64-linux-gnu.so
+...
+```
+
+:::
+
+:::
+
+::::
+
+
+:::{.fragment}
+
+::::{.callout-note}
+# Python 3 stable ABI
+
+Extension that limit themselves to a [Limited Python C API](https://docs.python.org/3/c-api/stable.html#contents-of-limited-api)
+are compatible with all Python 3 versions and don't need `cpython-<version>` suffix (`<name>.abi3.so` instead).
+::::
+
+:::
+
+:::{.notes}
+
+To show things off install `PyYaml` and 
+use `nm -DU` to inspect 
+
+
+:::
+
+
 
 ## Anatomy of an extension module 
 
