@@ -1,0 +1,341 @@
+# Raw Python Extension Module
+
+## Exercise 1
+
+In the cloned repository navigate to `exercise_1` folder.
+
+```{.sourceTree}
+├── CMakeLists.txt
+├── pyproject.toml
+├── README.md
+└── src
+    └── plunge.cxx
+```
+
+### Learning Objectives
+ - How does Python load compiled code?
+ - What is an 'Python extension module'? 
+ - 'Hello world' example of Python extension module
+
+
+## Exercise 1: Compiling
+
+**All exercises** in this course can be build in two ways: 
+
+Local build (does not install a package):
+```bash
+# In the exercise directory
+cmake -B build . 
+cmake --build build
+cd build && python -c "import <package_name>"
+```
+
+Package build:
+```bash
+# In the Python virtual environment
+# In the exercise directory
+# Add `-v` flag for verbose output
+pip install . -v 
+python -c "import <package_name>"
+```
+Package build will place the compiled library in the Python site-packages directory.
+You will be able to import it from everywhere.
+
+
+:::{.notes}
+
+- I need to train 
+
+:::
+
+
+## Python and C functions in Python? {.smaller}
+
+::::{.columns}
+
+::: {.column .fragment width="50%"}
+```{python}
+#| echo: true
+def foo():
+    print("Hello, world!")
+
+print(type(print))
+print(type(len))
+print(type(foo))
+```
+:::{.incremental}
+- Functions in Python are internally represented by `struct`s
+- Some of the functions are 'built-in', they are implemented in C (wrap around C function)
+  - e.g. [print](https://github.com/python/cpython/blob/39bd44fc7091dde09abfdc27af2559c1fb52c17d/Python/bltinmodule.c#L2309-L2394), 
+    [len](https://github.com/python/cpython/blob/39bd44fc7091dde09abfdc27af2559c1fb52c17d/Python/bltinmodule.c#L1991-L2003)
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+```c
+static PyObject *
+builtin_len(PyObject *module, PyObject *obj)
+{
+    Py_ssize_t res;
+
+    res = PyObject_Size(obj);
+    if (res < 0) {
+        assert(PyErr_Occurred());
+        return NULL;
+    }
+    return PyLong_FromSsize_t(res);
+}
+```
+- Internally Python passes objects via 'opaque' `PyObject` pointers.
+- Uses well documented [C API](https://docs.python.org/3/c-api/) to manipulate them
+  - `Py` prefixed functions
+:::
+::::
+
+
+:::: {.fragment}
+:::{.callout}
+Python allows external code to plug-into the 'built-in' methods mechanism.
+
+This is what 'Python extension modules' do!
+:::
+::::
+
+
+## Interlude: What is shared library? {.smaller}
+
+- We don't want to **recompile Python** with our extension each time.<br>
+- We need to introduce extra executable machine code at runtime stored in a separate
+file (⊙.☉)7
+
+::: {.fragment}
+This is accomplished by **shared libraries**: `*.so` on Linux or `*.dll` on Windows.
+
+
+![](images/dylib_diagram.png){width=50% fig-align="center"}
+
+::: {.callout}
+Shared libraries allow programs to load extra code at runtime.
+They select them 'like' a file and can extract function to run
+:::
+
+:::
+
+
+## Python extension modules {.smaller}
+
+::::{.columns}
+
+::: {.column width="70%"}
+
+'Python extension module' is a shared library with extra properties:
+
+- Has a name that follows a specific convention:<br>
+`<module_name>.cpython-<python_version><extra_metadata>.so`
+    - e.g. `my_mod.cpython-311-x86_64-linux-gnu.so`
+    - Conventions are defined in [PEP 3149](https://peps.python.org/pep-3149/)
+- Inside the library there is a function `PyInit_<module_name>`
+  - Python will try to load it and execute on `import <module_name>`
+  - Will search for the `*.so` in `sys.path` (like any module file)
+  - Note that the name of the function and library file must match!
+
+:::
+
+::: {.column width="30%"}
+:::{style="font-size: 0.85em;"}
+
+You can have a look inside your 'site-packages' directory extension modules!
+```bash
+cd $(python -c "import sys; print(sys.path[-1])")
+find . -name '*.so'
+```
+e.g.:
+```
+./rpds/rpds.cpython-312-x86_64-linux-gnu.so
+./_cffi_backend.cpython-312-x86_64-linux-gnu.so
+./yaml/_yaml.cpython-312-x86_64-linux-gnu.so
+...
+```
+
+:::
+
+:::
+
+::::
+
+
+:::{.fragment}
+
+::::{.callout-note}
+# Python 3 stable ABI
+
+Extension that limit themselves to a [Limited Python C API](https://docs.python.org/3/c-api/stable.html#contents-of-limited-api)
+are compatible with all Python 3 versions and don't need `cpython-<version>` suffix (`<name>.abi3.so` instead).
+::::
+
+:::
+
+:::{.notes}
+
+To show things off install `PyYaml` and 
+use `nm -DU` to inspect 
+
+
+:::
+
+
+
+## Anatomy of an extension module 
+
+Look into `exercise_1/src/plunge.cxx`:
+
+At the **start** of the file:
+```cpp
+#define PY_SSIZE_T_CLEAN // Not necessary after Python 3.13
+#include <Python.h>
+```
+These must be first lines (before any other include of C/C++ headers).
+
+## Anatomy of an extension module {.smaller}
+At the **end** of the file:
+```cpp
+PyMODINIT_FUNC PyInit_plunge(void)
+{
+  return PyModule_Create(&plunge_module_def);
+}
+```
+We define the hook by which Python will load the module. 
+
+:::{.callout-caution}
+The name of the function must be `PyInit_<module_name>`, where `<module_name>` must
+match the name of the `.so` file!
+Try to break it! Rename the `.so` (e.g. with `cp`) and try to load! 
+:::
+:::{.callout-note}
+`PyMODINIT_FUNC` is a quality-of-life macro. Makes sure it works correctly with C/C++ on different systems.
+:::
+
+::: {.fragment}
+Ok sure... but what goes into the `PyModule_Create` function?
+:::
+
+## `PyModuleDef` struct {.smaller}
+Unsurprisingly, a Python structure that collects the information about the module.
+
+```cpp
+// Doc: https://docs.python.org/3/c-api/module.html#c.PyModuleDef
+static struct PyModuleDef plunge_module_def = {
+  PyModuleDef_HEAD_INIT,                                      // Magic macro that handles Python internals 
+  "plunge",                                                   // Module name
+  "\"Jump into the water of Python extensions!\" module",     // Module docstring 
+  -1,                                                         // Set to -1 for 'single pass initialisation'
+  plunge_methods,                                             // Provide list of methods module contains
+  NULL,                                                       // Non null only in multi-pass initialisation
+  NULL,                                                       // Function slots for deconstruction
+  NULL,
+  NULL
+};
+```
+:::{.callout-note}
+Just try to ignore the extra fields for now! They are out of the scope for the simple example.
+:::
+:::{.callout-note}
+Single pass initialisation is what we use. It may not work well with the new free-threaded Python!
+It is still a default for many Python binding tools.
+:::
+
+## Method list 
+
+```cpp
+static PyMethodDef plunge_methods[] = {
+  {
+    "splash",       // <- Python side name of the function
+    splash_in_cpp,  // <- C/C++ function
+    METH_VARARGS,   // <- Calling convention for the function
+    "Docstring"
+  },
+  ...
+  {NULL, NULL, 0, NULL}  // <- This is a NULL terminated list!
+}
+```
+
+The methods in a module are specified by a C-style array of `PyMethodDef` structures. 
+
+:::{.callout-caution}
+The list is null terminated with the special 'sentinel' value `{NULL, NULL, 0, NULL}`.
+:::
+
+## Python compatible C/C++ function{.smaller}
+
+```cpp
+static PyObject *splash_in_cpp(PyObject */*self*/, PyObject *args)
+{
+  const char *name;
+  if (!PyArg_ParseTuple(args, "s", &name))
+    return NULL;
+
+  PySys_WriteStdout("%s made a splash!\U0001F30A\n", name);
+  Py_RETURN_NONE;
+}
+```
+Required function signature depends on the calling convention.
+
+For `METH_VARARGS` function must accept two pointers to `PyObject` (Python object descriptors).
+
+- `self` is the module object
+- `args` is a tuple of arguments passed from Python.
+
+## Exercise 1: Add a new function {.smaller}
+
+Currently the `plunge` module contains two functions: `splash` and `raise_exception`.
+
+To compile and run, in the `exercise_1` directory run:
+```bash
+pip install . -v
+python -c "import plunge; plunge.splash("Joe")"
+```
+
+:::{.callout-note}
+# Task
+Create a new function `multiple_splash` that takes two arguments `name` and `count` and prints '`name` made a splash!' `count` times.
+
+If the count is negative, it should raise a `ValueError` exception.
+:::
+
+:::{.callout-tip}
+# Getting integer out of a Tuple
+See 'Numbers' section in [parsing arguments](https://docs.python.org/3/c-api/arg.html#parsing-arguments) in the Python doc.
+:::
+
+:::{.callout-warning appearance="minimal"}
+# More things to try (time allowing)
+- What will happen if you pass a non-integer value for `count` or non-bool to `raise_exception`? Is the behaviour what you expected? 
+
+:::
+
+<!-- ## `ctypes` interlude {data-visibility="hidden"}
+We talked about extension modules but a C functions in shared libraries can be 
+called using [ctypes](https://docs.python.org/3/library/ctypes.html) module of Python.
+
+
+Small follow-up exercise to call a function from the `.so` without loading the module.
+
+Do I have time? Should I drop this? -->
+
+
+## Why you should not write extension modules by hand{.smaller}
+
+The purpose of this section was to give you a peak behind the curtain.
+
+:::{.incremental}
+- Projects generally do not write raw extension modules
+- Interoperability with Python is common enough that many tools were developed
+- Libraries exist for popular language (C++, Fortran, Rust, Go...)
+- We can embark on a different type of swimming!
+:::
+
+:::{.fragment style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"}
+![](images/ocean-liner.avif){width="80%" height="80%" style="object-fit: cover;"}
+:::
+

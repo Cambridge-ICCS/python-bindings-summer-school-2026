@@ -3,3 +3,26 @@ title: "Python bindings to compiled languages"
 ---
 
 {{< include introduction.qmd >}}
+
+{{< include python_extension_modules.qmd >}}
+
+{{< include pybind.qmd >}}
+
+<!-- {{< include fortran.qmd >}} -->
+
+{{< include outro.qmd >}}
+
+## Try style (remove in final presentation) {visibility="hidden"}
+
+### Section heading
+
+This is ordinary text
+
+```cpp
+int main() {
+    std::cout << "Hello, world!" << std::endl;
+    return 0;
+}
+```
+
+more test
