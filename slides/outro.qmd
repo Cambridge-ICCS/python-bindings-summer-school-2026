@@ -5,7 +5,7 @@
 Since Fortran is a language with less 'industrial' interest support is limited:
 
  - `f2py` interface generator, [part of numpy](https://numpy.org/doc/stable/f2py/)
-   - Tailored for older Fotran 77 libraries
+   - Tailored for older Fotran 77 libraries (put supports Fortran 90)
    - Lacks support for modern features
  - ISO C interoperability (Fortran 2003)
    - Fortran can call C and vice versa

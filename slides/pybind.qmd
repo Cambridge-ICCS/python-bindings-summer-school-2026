@@ -311,7 +311,7 @@ With: 42
 
 
 
-## pybind11: Summary {.smaller}
+## pybind11 summary {.smaller}
 
 **Not covered**:
 
