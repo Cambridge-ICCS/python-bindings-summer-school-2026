@@ -5,7 +5,7 @@
 Since Fortran is a language with less 'industrial' interest support is limited:
 
  - `f2py` interface generator, [part of numpy](https://numpy.org/doc/stable/f2py/)
-   - Tailored for older Fotran 77 libraries (put supports Fortran 90)
+   - Tailored for older Fortran 77 libraries (but supports Fortran 90)
    - Lacks support for modern features
  - ISO C interoperability (Fortran 2003)
    - Fortran can call C and vice versa
@@ -21,7 +21,7 @@ This is not driven by any fundamental problems, but by lack of demand.
 - [Boost.Python](https://www.boost.org/doc/libs/latest/libs/python/doc/html/index.html)
     - Inspiration for pybind11
 - Python [ctypes](https://docs.python.org/3/library/ctypes.html)
-    - Forign function interface for Python
+    - Foreign function interface for Python
 - [Cython](https://cython.org/)
     - Python to C compiler
     - Adds language extensions for foreign code
@@ -36,7 +36,7 @@ And many more that I have missed...
 :::{.incremental}
  - Python has a standardised and well described way to plug your compiled code
  - You are not expected to write extension modules by hand
-   - One can relay on dedicated libraries e.g. `pybind11` in C++
+   - One can rely on dedicated libraries e.g. `pybind11` in C++
  - It is not that hard!
    - Sometimes when you wish you to 'just write a loop'... you can!
    - You can plug your code into the rich, interoperable Python ecosystem

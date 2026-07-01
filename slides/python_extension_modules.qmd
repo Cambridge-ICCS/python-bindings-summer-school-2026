@@ -190,7 +190,7 @@ use `nm -DU` to inspect
 
 Look into `exercise_1/src/plunge.cxx`:
 
-At the **start** of the file::
+At the **start** of the file:
 ```cpp
 #define PY_SSIZE_T_CLEAN // Not necessary after Python 3.13
 #include <Python.h>
@@ -208,7 +208,7 @@ PyMODINIT_FUNC PyInit_plunge(void)
 We define the hook by which Python will load the module. 
 
 :::{.callout-caution}
-The name of the function must be `PyInit_<module_name>`, where `<module_name>` and 
+The name of the function must be `PyInit_<module_name>`, where `<module_name>` must
 match the name of the `.so` file!
 Try to break it! Rename the `.so` (e.g. with `cp`) and try to load! 
 :::
@@ -290,7 +290,7 @@ For `METH_VARARGS` function must accept two pointers to `PyObject` (Python objec
 
 Currently the `plunge` module contains two functions: `splash` and `raise_exception`.
 
-To Compile and run, in the `exercise_1` directory run:
+To compile and run, in the `exercise_1` directory run:
 ```bash
 pip install . -v
 python -c "import plunge; plunge.splash("Joe")"

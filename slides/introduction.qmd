@@ -16,7 +16,7 @@ What this course will **not** teach you:
 What this course **will** teach you:
 
 ::::{.incremental}
-- Give a 'taste' of how binding compile code looks like
+- Give a 'taste' of how binding compiled code looks like
 - Showcase some things you can achieve with it
 - Give some examples that can be good starting point for further study
 :::: 
@@ -103,7 +103,7 @@ System requirements:
 :::{.callout-caution}
 # Running locally is the danger zone 🛦🛦🛦
 
-Please prefer the codespace for the course. Try on you machine during miniproject or at home.
+Please prefer the codespace for the course. Try on your machine during miniproject or at home.
 
 :::
 

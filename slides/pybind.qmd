@@ -1,6 +1,6 @@
 # C++ bindings with pybind11
 
-## Intro into pybind11 {.smaller}
+## Intro to pybind11 {.smaller}
 
 ::::{.columns}
 
@@ -33,7 +33,7 @@ Can be found on [github](https://github.com/pybind/pybind11)
 
 ## High-level architecture overview {.smaller}
 
-pybind11 uses C++ metaprograming to allow describing bindings in a way
+pybind11 uses C++ metaprogramming to allow describing bindings in a way
 reminiscent of Python syntax.
 
 :::{.incremental}
@@ -48,7 +48,7 @@ reminiscent of Python syntax.
 ::: {.callout-tip .fragment}
 # C++ raw string literals
 
-Writing well formated Python docstrings in C++ can be a bit of a pain.
+Writing well formatted Python docstrings in C++ can be a bit of a pain.
 [Raw string literal helps](https://godbolt.org/z/q6T7eGExE) a lot.
 
 It allows to write multi-line strings that will render 'as written':
@@ -201,12 +201,12 @@ inf
 **There be dragons: mutable references**
 
 ```cpp
-void addone(&float x) { x += 1.0f; }
+void addone(float& x) { x += 1.0f; }
 ...
 m.def("addone", &addone, "Add one to a float");
 ```
 
-In Python;
+In Python:
 ```python
 >>> a = 1.0
 >>> plunge_pyb.addone(a)
@@ -273,7 +273,7 @@ assert my_len([1, 2, 3]) == 3
 :::
 
 :::{.callout .fragment}
-We could have written `std::vector<int>`! We take reference of a temporary copy.
+We could have written `std::vector<int>`! We take a reference of a temporary copy.
 :::
 
 ::: {.fragment}
@@ -299,8 +299,8 @@ Subset of functionality needed for the exercises:
 
 py::array_t<double> my_array = py::array_t<double>(10); // 1D array of 10 doubles
 
-my.array.mutable_at(0) = 3.14; // Mutable access to an element
-auto b = my.array.at(0);       // Immutable access to an element
+my_array.mutable_at(0) = 3.14; // Mutable access to an element
+auto b = my_array.at(0);       // Immutable access to an element
 
 ...
 // You can accept it as an argument to a function
