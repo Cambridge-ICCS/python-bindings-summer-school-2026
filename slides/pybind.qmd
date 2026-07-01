@@ -224,9 +224,35 @@ def(m, "addone", [](float x) {addone(x); return x;}, "Add one to a float");
 ```
 :::
 
-## Exercise 2: Task 1
+## Exercise 2: Task 1 {.smaller}
 
-TODO
+You will find a familiar `splash` and `raise_exception` functions inside
+the `exercise_2/src/plunge_pyb.cpp` file!
+
+The extension module name is `plunge_pyb`, to compile and run:
+```bash
+pip install . -v
+python -c "import plunge_pyb; plunge_pyb.splash("Joe")"
+```
+
+:::{.callout-note}
+# Task
+
+Once again create a new function `multiple_splash` that takes two arguments `name` and `count` and prints '`name` made a splash!' `count` times.
+
+If the count is negative, it should raise a `ValueError` exception.
+:::
+
+:::{.callout-tip}
+# Exception translation
+
+pybind11 converts thrown C++ exceptions to different Python exceptions.
+Consult the [translation table](https://pybind11.readthedocs.io/en/stable/advanced/exceptions.html#built-in-c-to-python-exception-translation) to know what to `raise` on C++ side.
+:::
+
+:::{.callout-caution appearance="minimal"}
+Please ignore 'Task 2' parts for now ツ
+:::
 
 ## STL containers {.smaller}
 We bind in C++ with:
@@ -307,8 +333,33 @@ m.def("my_callback", [](std::function<void(int)> callback) {
 With: 42
 ```
 
-##  Exercise 2: Task 2
+##  Exercise 2: Task 2 {.smaller}
 
+Once again we have two functions written for reference:
+`print_numpy_array` and `apply_on_range` that demonstrate the use of `py::array_t`
+and callback via `std::function`.
+
+Compile and run:
+```bash
+pip install . -v
+python -c "import plunge_pyb; plunge_pyb.print_numpy_array([1,2,3])"
+python -c 'import plunge_pyb; print(plunge_pyb.apply_on_range(lambda x: x**2, 0, 10))'
+```
+
+:::{.callout-note}
+# Task
+
+Implement a new function `interpolate` that takes a `py::array_t<double>` and a `std::function<double(double)>` as arguments and returns a new `py::array_t<double>` with the function applied to each element of the input array.
+
+Return either `std::vector<double>` or `py::array_t<double>` from the function. Chose your favourite (or do both!).
+
+Example signature:
+```cpp
+py::array_t<double> interpolate_np(std::function<double(double)> func, py::array_t<double> grid) {
+  ...
+}
+```
+:::
 
 
 ## pybind11 summary {.smaller}
