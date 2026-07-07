@@ -110,7 +110,7 @@ This is what 'Python extension modules' do!
 file (⊙.☉)7
 
 ::: {.fragment}
-This is accomplished by **shared libraries**: `*.so` on Linux or `*.dll` on Windows.
+This is accomplished by **shared libraries**: `*.so` on Linux, `*.dll` on Windows, or `*.dylib` on MacOS.
 
 
 ![](images/dylib_diagram.png){width=50% fig-align="center"}
