@@ -5,8 +5,8 @@ What this course will **not** teach you:
 
 ::::{.incremental}
 - How to properly bind compiled (C++/Fortran) code to Python
-- If you are quick enough you can still make it to Testing (part 1)!
 - The topic is too broad to be covered in 1.5h session
+- If you are quick enough you can still make it to Testing (part 1)!
 
 ::::
 :::
