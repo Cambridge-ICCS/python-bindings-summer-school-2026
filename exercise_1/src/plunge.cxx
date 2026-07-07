@@ -15,6 +15,7 @@ static PyObject *splash_in_cpp(PyObject */*self*/, PyObject *args)
   // Doc: 
   // - https://docs.python.org/3/c-api/arg.html#c.PyArg_ParseTuple
   // - https://docs.python.org/3/c-api/arg.html#parsing-arguments-and-building-values
+  // - https://web.mit.edu/people/amliu/vrut/python/ext/parseTuple.html
   if (!PyArg_ParseTuple(args, "s", &name))
     return NULL;
 
