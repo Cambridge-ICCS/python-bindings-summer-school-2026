@@ -18,34 +18,33 @@ In the cloned repository navigate to `exercise_1` folder.
  - 'Hello world' example of Python extension module
 
 
-## Exercise 1: Compiling
+## Exercise 1: Compiling and Overview {.smaller}
 
-**All exercises** in this course can be built in two ways: 
-
-Local build (does not install a package):
-```bash
-# In the exercise directory
-cmake -B build . 
-cmake --build build
-cd build && python -c "import <package_name>"
-```
-
-Package build:
+We can build the package using the following commands:
 ```bash
 # In the Python virtual environment
 # In the exercise directory
 # Add `-v` flag for verbose output
 pip install . -v 
-python -c "import <package_name>"
+python -c "import plunge_ex"
 ```
-Package build will place the compiled library in the Python site-packages directory.
-You will be able to import it from everywhere.
 
+::: {.callout-note}
+# Task
 
-:::{.notes}
+1. Build the package using `pip`.
+2. Open Python and import the `punge_ex` module.
+3. Inspect the contents with `help`
+4. Use the implemented functions
 
-- I need to train 
+Let us go through it now together!
+:::
 
+:::{.callout-warning appearance="minimal"}
+Try to look inside the source in `src/plunge_ex.cpp` and see the C++
+source of the Python methods.
+
+Don't worry if they seem arcane. We will go through the details in a moment ;-)
 :::
 
 
