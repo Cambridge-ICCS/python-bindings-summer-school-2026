@@ -142,5 +142,9 @@ I will be stealing an analogy (might be a spoiler for the dinner! ;-) )
 :::{.fragment .r-stretch style="text-align: center;"}
 ![](images/dog-swim.jpg){width=40%}
 
+::: {.attribution}
+Photo by [Sheila Brown](https://www.publicdomainpictures.net/en/view-image.php?image=245390&picture=dachshund-dog-swimming-in-pool)
+:::
+
 ### Let us jump into the water!
 :::

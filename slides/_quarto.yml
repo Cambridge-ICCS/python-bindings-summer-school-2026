@@ -14,7 +14,8 @@ format:
     scrollable: false
     width: 1280
     height: 720
-
+revealjs-plugins:
+  - attribution
 authors:
   - name: "Mikolaj A. Kowalski"
     email: "mak60@cam.ac.uk"
