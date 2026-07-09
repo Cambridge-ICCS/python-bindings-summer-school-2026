@@ -336,5 +336,10 @@ The purpose of this section was to give you a peek behind the curtain.
 
 :::{.fragment style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"}
 ![](images/ocean-liner.avif){width="80%" height="80%" style="object-fit: cover;"}
+
+:::{.attribution}
+Photo by [Kristina Lenberg](https://unsplash.com/photos/a-large-cruise-ship-in-the-middle-of-the-ocean-vIelyz-1aMo)
+:::
+
 :::
 
