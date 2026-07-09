@@ -9,7 +9,7 @@ In the cloned repository navigate to `exercise_1` folder.
 ├── pyproject.toml
 ├── README.md
 └── src
-    └── plunge.cxx
+    └── plunge.cpp
 ```
 
 ### Learning Objectives
@@ -188,7 +188,7 @@ use `nm -DU` to inspect
 
 ## Anatomy of an extension module 
 
-Look into `exercise_1/src/plunge.cxx`:
+Look into `exercise_1/src/plunge.cpp`:
 
 At the **start** of the file:
 ```cpp

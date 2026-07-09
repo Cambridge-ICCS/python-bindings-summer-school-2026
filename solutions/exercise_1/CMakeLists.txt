@@ -10,7 +10,7 @@ find_package(
   COMPONENTS Development.Module
   REQUIRED)
 
-python_add_library(plunge MODULE src/plunge.cxx WITH_SOABI)
+python_add_library(plunge MODULE src/plunge.cpp WITH_SOABI)
 
 set_property(TARGET plunge PROPERTY CXX_STANDARD 17)
 set_property(TARGET plunge PROPERTY CXX_STANDARD_REQUIRED ON)
