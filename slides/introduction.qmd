@@ -22,6 +22,27 @@ What this course **will** teach you:
 :::: 
 :::
 
+## Prerequisites {.smaller}
+
+In the course we will assume:
+
+ - You are familiar and comfortable with Python
+ - You have some prior experience with C/C++
+   - Enough to read and write simple functions
+   - Use `std::vector`, `std::string`, `std::function`
+   - Have seen lambda expressions before e.g. `[](int x){return x*x;}`
+
+:::{.fragment}
+
+#### Show of hands
+
+::::{.incremental}
+- How many of you have **written** a compiled code coupled to Python?
+- How many of you have **run** a compiled code in Python?
+::::
+
+:::
+
 
 ## Preliminaries {.smaller}
 
