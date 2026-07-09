@@ -33,14 +33,6 @@ and then activate it:
 source name-of-your-venv/bin/activate
 ```
 
-The only dependency we need to install is the toolkit that will help us build
-Python extensions. In this exercise we will use [scikit-build-core](https://scikit-build-core.readthedocs.io/en/latest/)
-which is a modern build system for Python extensions. You can install it with pip:
-
-```bash
-pip install scikit-build-core
-```
-
 ### Building and installing the extension
 
 To build the extension module, simply navigate to the exercise directory
