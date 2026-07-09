@@ -1,5 +1,8 @@
 ---
 title: "Python bindings to compiled languages"
+format:
+    revealjs:
+        output-file: index.html
 ---
 
 {{< include introduction.qmd >}}

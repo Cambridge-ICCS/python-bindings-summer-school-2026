@@ -44,7 +44,7 @@ python -m pip pip install -r requirements.txt
 Render the slide deck:
 
 ```bash
-quarto render index.qmd --output-dir _site/
+quarto render presentation.qmd
 ```
 
 The generated [reveal.js](https://revealjs.com/) presentation will be in `_site/`.
