@@ -71,7 +71,7 @@ static PyObject *multiple_splash(PyObject */*self*/, PyObject *args)
 // Module Definition
 //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-static PyMethodDef plunge_methods[] = {
+static PyMethodDef plunge_ex_methods[] = {
   {
     "splash",
     splash_in_cpp,
@@ -97,12 +97,12 @@ static PyMethodDef plunge_methods[] = {
 };
 
 // Doc: https://docs.python.org/3/c-api/module.html#c.PyModuleDef
-static struct PyModuleDef plunge_module_def = {
+static struct PyModuleDef plunge_ex_module_def = {
   PyModuleDef_HEAD_INIT,                                      // Magic macro that handles Python internals 
-  "plunge",                                                   // Module name
+  "plunge_ex",                                                   // Module name
   "\"Jump into the water of Python extensions!\" module",     // Module docstring 
   -1,                                                         // Set to -1 for 'single pass initialisation'
-  plunge_methods,                                             // Provide list of methods module contains
+  plunge_ex_methods,                                             // Provide list of methods module contains
   NULL,                                                       // Non null only in multi-pass initialisation
   NULL,                                                       // Function slots for deconstruction
   NULL,
@@ -111,7 +111,7 @@ static struct PyModuleDef plunge_module_def = {
 
 // Note that we are using a legacy 'single-phase' initialisation
 // https://docs.python.org/3/c-api/extension-modules.html#legacy-single-phase-initialization
-PyMODINIT_FUNC PyInit_plunge(void)
+PyMODINIT_FUNC PyInit_plunge_ex(void)
 {
-  return PyModule_Create(&plunge_module_def);
+  return PyModule_Create(&plunge_ex_module_def);
 }
