@@ -5,7 +5,7 @@ requires = [
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "plunge"
+name = "plunge_ex"
 version = "0.1.0"
 description = "Jump into the world of Python extensions (legs first) and make a splash!"
 authors = [

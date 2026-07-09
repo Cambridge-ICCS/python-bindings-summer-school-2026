@@ -9,7 +9,7 @@ In the cloned repository navigate to `exercise_1` folder.
 ├── pyproject.toml
 ├── README.md
 └── src
-    └── plunge.cpp
+    └── plunge_ex.cpp
 ```
 
 ### Learning Objectives
@@ -188,7 +188,7 @@ use `nm -DU` to inspect
 
 ## Anatomy of an extension module 
 
-Look into `exercise_1/src/plunge.cpp`:
+Look into `exercise_1/src/plunge_ex.cpp`:
 
 At the **start** of the file:
 ```cpp
@@ -200,9 +200,9 @@ These must be first lines (before any other include of C/C++ headers).
 ## Anatomy of an extension module {.smaller}
 At the **end** of the file:
 ```cpp
-PyMODINIT_FUNC PyInit_plunge(void)
+PyMODINIT_FUNC PyInit_plunge_ex(void)
 {
-  return PyModule_Create(&plunge_module_def);
+  return PyModule_Create(&plunge_ex_module_def);
 }
 ```
 We define the hook by which Python will load the module. 
@@ -225,12 +225,12 @@ Unsurprisingly, a Python structure that collects the information about the modul
 
 ```cpp
 // Doc: https://docs.python.org/3/c-api/module.html#c.PyModuleDef
-static struct PyModuleDef plunge_module_def = {
+static struct PyModuleDef plunge_ex_module_def = {
   PyModuleDef_HEAD_INIT,                                      // Magic macro that handles Python internals 
-  "plunge",                                                   // Module name
+  "plunge_ex",                                                   // Module name
   "\"Jump into the water of Python extensions!\" module",     // Module docstring 
   -1,                                                         // Set to -1 for 'single pass initialisation'
-  plunge_methods,                                             // Provide list of methods module contains
+  plunge_ex_methods,                                             // Provide list of methods module contains
   NULL,                                                       // Non null only in multi-pass initialisation
   NULL,                                                       // Function slots for deconstruction
   NULL,
@@ -248,7 +248,7 @@ It is still a default for many Python binding tools.
 ## Method list 
 
 ```cpp
-static PyMethodDef plunge_methods[] = {
+static PyMethodDef plunge_ex_methods[] = {
   {
     "splash",       // <- Python side name of the function
     splash_in_cpp,  // <- C/C++ function
@@ -288,12 +288,12 @@ For `METH_VARARGS` function must accept two pointers to `PyObject` (Python objec
 
 ## Exercise 1: Add a new function {.smaller}
 
-Currently the `plunge` module contains two functions: `splash` and `raise_exception`.
+Currently the `plunge_ex` module contains two functions: `splash` and `raise_exception`.
 
 To compile and run, in the `exercise_1` directory run:
 ```bash
 pip install . -v
-python -c 'import plunge; plunge.splash("Joe")'
+python -c 'import plunge_ex; plunge_ex.splash("Joe")'
 ```
 
 :::{.callout-note}

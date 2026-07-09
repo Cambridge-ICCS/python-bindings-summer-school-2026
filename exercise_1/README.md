@@ -51,16 +51,6 @@ project you will want to explicitly reinstall the package after each change:
 pip install . -v
 ```
 
-[!WARNING]
-    We have named our package `plunge`, but there is an existing PyPI package
-    [with the same name](https://pypi.org/project/plunge/). Take care when installing
-    since if you invoke:
-    ```bash
-    pip install plunge
-    ```
-    it will install **the PyPI package** instead of the exercise one.
-
-
 #### Local build
 
 Instead of installing the package to the active python environment, you can
@@ -70,11 +60,11 @@ the exercise directory:
 cmake -B build      # This will create a `build` directory
 cmake --build build # This compile the package
 ```
-Inside the `build` folder a file `plunge.cpython-<version>-<platform>.so`
+Inside the `build` folder a file `plunge_ex.cpython-<version>-<platform>.so`
 will be created. If you invoke a python from the `build` directory:
 ```bash
 cd build
-python -c 'import plunge'
+python -c 'import plunge_ex'
 ```
 The import will succeed.
 
@@ -83,7 +73,7 @@ which makes debugging the package easier.
 
 ## Task
 
-Inside the `plunge.cpp` you may notice that there are two functions already defined:
+Inside the `plunge_ex.cpp` you may notice that there are two functions already defined:
 - `splash` that takes a string and prints a message to the console
 - `raise_exception` that optionally raises an exception
 
