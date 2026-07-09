@@ -61,6 +61,26 @@ pip install . -v
     it will install **the PyPI package** instead of the exercise one.
 
 
+#### Local build
+
+Instead of installing the package to the active python environment, you can
+also build it locally with CMake by running the following commands from
+the exercise directory:
+```bash
+cmake -B build      # This will create a `build` directory
+cmake --build build # This compile the package
+```
+Inside the `build` folder a file `plunge.cpython-<version>-<platform>.so`
+will be created. If you invoke a python from the `build` directory:
+```bash
+cd build
+python -c 'import plunge'
+```
+The import will succeed.
+
+The benefit of local build is that it allows colours in the output of the compiler
+which makes debugging the package easier.
+
 ## Task
 
 Inside the `plunge.cpp` you may notice that there are two functions already defined:
