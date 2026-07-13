@@ -106,7 +106,8 @@ PYBIND11_MODULE(module_name, m) {
   m.attr("__version__") = "0.1.0";
 
   // We take an address of function when we bind them
-  m.def("square", &square, "Function docstring");
+  // py:arg allows us to specify the name for arguments
+  m.def("square", &square, "Function docstring", py::arg("x"));
 
   // Not necessary but we can delegate to functions to bind classes/sets of functions
   // Keeps things clean
