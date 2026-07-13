@@ -286,6 +286,11 @@ For `METH_VARARGS` function must accept two pointers to `PyObject` (Python objec
 - `self` is the module object
 - `args` is a tuple of arguments passed from Python.
 
+We can extract data from `args` via `PyArg_ParseTuple` function, format string describes contents, e.g.:
+
+- `"s"`:single string; `"ss"`: two strings; `"f"`: a float
+
+
 ## Exercise 1: Add a new function {.smaller}
 
 Currently the `plunge` module contains two functions: `splash` and `raise_exception`.
