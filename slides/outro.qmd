@@ -11,9 +11,6 @@ Since Fortran is a language with less 'industrial' interest support is limited:
    - Fortran can call C and vice versa
    - You can write a C wrapper for your Fortran code and then use pybind11 to bind the C wrapper
 
-:::{.callout .fragment}
-This is not driven by any fundamental problems, but by lack of demand.
-:::
 
 ## Other useful tools and methods {.smaller}
 
